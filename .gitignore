@@ -9,14 +9,23 @@ __pycache__/
 *.pyo
 *.pyd
 *.egg-info/
+.venv/
+venv/
 
-# Docker
-**/Dockerfile
-**/docker-compose.yml
+# Environment & Secrets
+.env
 
-# General Development Files
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
 *.log
-*.DS_Store
-*.env
-*.idea/
-*.vscode/
+
+# Inbox workflow
+_processed/
+_output/

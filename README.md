@@ -1,29 +1,44 @@
-# Enterprise Glossary System
+# Enterprise Glossary Management System (EGMS)
 
-## Project Overview
-The Enterprise Glossary System is a robust platform designed to manage and standardize terminology across various domains within an organization. The system aids in promoting consistent usage of terms, reducing ambiguity, and enhancing communication within teams.
+A centralized, URI-based enterprise glossary that serves as the single source of truth for organizational terminology, accessible to both humans and AI systems.
 
-### Purpose
-- Centralizes glossary definitions for easy access.
-- Enables collaboration among teams to refine and update terms.
-- Supports user role management for controlled access to definitions.
+## Problem
+
+Teams use different terms for the same concepts, glossary terms are scattered across wikis, Confluence, spreadsheets, and READMEs, and AI systems receive inconsistent context leading to poor responses.
+
+## Key Objectives
+
+1. **Standardization** — One authoritative source for all company terminology
+2. **Accessibility** — Easily discoverable and queryable by all stakeholders
+3. **AI Integration** — Machine-readable (RDF/semantic web) format for AI agents
+4. **Maintainability** — Version control and audit trails
+5. **Scalability** — Support thousands of terms across departments and domains
+6. **Integration** — API access for embedding in documentation, systems, and tools
+
+## Technology Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Platform | [SKOSMOS](https://skosmos.org/) (open-source, semantic web-native) |
+| Storage | [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) (RDF triple store) |
+| Infrastructure | Cloud hosting (AWS/GCP/Azure) |
 
 ## Project Structure
-The project is organized into the following directories:
 
-- **src/**: Contains all the source code for the application.
-  - **components/**: React components for the front-end.
-  - **services/**: API services for backend communication.
-  - **hooks/**: Custom React hooks for state management.
-- **public/**: Static files like images and the entry HTML file.
-- **tests/**: Test files ensuring application reliability.
-- **docs/**: Documentation related to usage and setup.
+```
+enterprise-glossary-system/
+├── docs/                  # Documentation
+│   ├── design-architecture.md
+│   └── prds/
+│       └── prd.md         # Product Requirements Document
+├── LICENSE
+└── README.md
+```
 
 ## Getting Started
-To get started with the project, clone the repository and follow the setup instructions in the `docs/` directory.
 
-## Contributing
-Contributions are welcome! Please follow the guidelines in the `CONTRIBUTING.md` file for making contributions to this project.
+See the [Design & Implementation Guide](docs/design-architecture.md) for architecture details and the [PRD](docs/prds/prd.md) for full requirements.
 
 ## License
+
 This project is licensed under the MIT License.
