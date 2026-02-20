@@ -1,0 +1,53 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix eg:   <http://glossary.example.org/terms/> .
+
+# ======================================================================
+# Enterprise Glossary Concept Scheme
+# ======================================================================
+# URI pattern: http://glossary.example.org/terms/{kebab-case-term}
+# Named graph: http://glossary.example.org/
+# ======================================================================
+
+eg:enterprise-glossary a skos:ConceptScheme ;
+    skos:prefLabel "Enterprise Glossary"@en ;
+    dct:title "Enterprise Glossary Management System Vocabulary"@en ;
+    dct:description "Centralized, URI-based glossary of standardized organizational terminology."@en ;
+    dct:creator "EGMS Team" ;
+    dct:created "2026-02-20"^^xsd:date ;
+    dct:modified "2026-02-20"^^xsd:date ;
+    skos:hasTopConcept eg:engineering ,
+                       eg:business ,
+                       eg:infrastructure ,
+                       eg:process .
+
+# ======================================================================
+# Top-Level Categories
+# ======================================================================
+
+eg:engineering a skos:Concept ;
+    skos:prefLabel "Engineering"@en ;
+    skos:definition "Concepts related to software engineering practices, tools, and workflows."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:business a skos:Concept ;
+    skos:prefLabel "Business"@en ;
+    skos:definition "Concepts related to business operations, metrics, and management."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:infrastructure a skos:Concept ;
+    skos:prefLabel "Infrastructure"@en ;
+    skos:definition "Concepts related to IT infrastructure, networking, and platform services."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:process a skos:Concept ;
+    skos:prefLabel "Process"@en ;
+    skos:definition "Concepts related to organizational processes, workflows, and operational practices."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .

@@ -1,0 +1,2 @@
+uri_slug,pref_label,alt_labels,hidden_labels,definition,broader_slug,related_slugs,scope_note,example
+deployment-pipeline,Deployment Pipeline,"Deploy Pipeline|Release Pipeline",,An automated sequence of stages that builds tests and deploys software from source code to production.,engineering,"ci-cd|staging-environment",,

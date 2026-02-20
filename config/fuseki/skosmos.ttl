@@ -1,0 +1,79 @@
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix tdb2:    <http://jena.apache.org/2016/tdb#> .
+@prefix text:    <http://jena.apache.org/text#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+# ======== Fuseki Server ========
+
+[] rdf:type fuseki:Server ;
+   fuseki:services ( :service ) .
+
+# ======== Fuseki Service ========
+# Exposes endpoints at /skosmos/sparql, /skosmos/query, /skosmos/update, etc.
+
+:service a fuseki:Service ;
+    fuseki:name "skosmos" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "query" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-r ;
+                      fuseki:name "get" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ;
+                      fuseki:name "data" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:upload ;
+                      fuseki:name "upload" ] ;
+    fuseki:dataset :text_dataset .
+
+# ======== Text Dataset (wraps TDB2 + Lucene) ========
+
+:text_dataset a text:TextDataset ;
+    text:dataset :tdb_dataset ;
+    text:index :index_lucene .
+
+# ======== TDB2 Persistent Dataset ========
+
+:tdb_dataset a tdb2:DatasetTDB2 ;
+    tdb2:location "/fuseki-base/databases/skosmos" ;
+    tdb2:unionDefaultGraph true .
+
+# ======== Lucene Text Index ========
+# Indexes SKOS labels for fast full-text search from SKOSMOS
+
+:index_lucene a text:TextIndexLucene ;
+    text:directory "/fuseki-base/databases/skosmos-lucene" ;
+    text:entityMap :entity_map ;
+    text:storeValues true ;
+    text:multilingualSupport true .
+
+# ======== Entity Map ========
+# Each SKOS label property gets its own Lucene field name.
+# SKOSMOS requires separate field names for prefLabel, altLabel, hiddenLabel.
+
+:entity_map a text:EntityMap ;
+    text:defaultField "pref" ;
+    text:entityField "uri" ;
+    text:uidField "uid" ;
+    text:langField "lang" ;
+    text:graphField "graph" ;
+    text:map (
+        [ text:field "pref" ;
+          text:predicate skos:prefLabel ;
+          text:analyzer [ a text:LowerCaseKeywordAnalyzer ] ]
+        [ text:field "alt" ;
+          text:predicate skos:altLabel ;
+          text:analyzer [ a text:LowerCaseKeywordAnalyzer ] ]
+        [ text:field "hidden" ;
+          text:predicate skos:hiddenLabel ;
+          text:analyzer [ a text:LowerCaseKeywordAnalyzer ] ]
+        [ text:field "notation" ;
+          text:predicate skos:notation ;
+          text:analyzer [ a text:LowerCaseKeywordAnalyzer ] ]
+    ) .

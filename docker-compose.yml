@@ -1,0 +1,59 @@
+services:
+  fuseki:
+    hostname: fuseki
+    image: secoresearch/fuseki:latest
+    ports:
+      - "${FUSEKI_PORT:-3030}:3030"
+    environment:
+      ADMIN_PASSWORD: "${FUSEKI_ADMIN_PASSWORD:-admin123}"
+      JAVA_OPTIONS: "-Xmx2g -Xms1g"
+      QUERY_TIMEOUT: "30000"
+    volumes:
+      - ./config/fuseki/skosmos.ttl:/fuseki-base/configuration/skosmos.ttl
+      - fuseki-data:/fuseki-base/databases
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:3030/$$/ping || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  fuseki-cache:
+    hostname: fuseki-cache
+    image: varnish:7.6
+    ports:
+      - "${CACHE_PORT:-9031}:80"
+    volumes:
+      - ./config/varnish/default.vcl:/etc/varnish/default.vcl
+    depends_on:
+      fuseki:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "varnishadm ping || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  skosmos:
+    hostname: skosmos
+    image: quay.io/natlibfi/skosmos:latest
+    ports:
+      - "${SKOSMOS_PORT:-9090}:80"
+    volumes:
+      - ./config/skosmos/config.ttl:/var/www/html/config.ttl
+    depends_on:
+      fuseki-cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:80/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  fuseki-data:

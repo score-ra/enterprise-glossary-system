@@ -111,13 +111,82 @@ SKOSMOS was selected as the platform because it is:
 
 ## Deployment Strategy
 
-<!-- TODO: Define container strategy, CI/CD pipeline, and environment setup -->
+### Container Architecture
+
+```
+                    :9090                :9031 (internal)         :3030
+ Browser/API  -->  SKOSMOS  -->  Varnish Cache  -->  Apache Jena Fuseki
+                   (PHP/Apache)    (VCL rules)       (TDB2 + Lucene)
+```
+
+Three Docker containers orchestrated via Docker Compose:
+
+| Service | Image | Port | Purpose |
+|---------|-------|------|---------|
+| fuseki | secoresearch/fuseki | 3030 | RDF triple store with SPARQL and Graph Store Protocol |
+| fuseki-cache | varnish:7.6 | 9031 | HTTP cache for SPARQL read queries (5min TTL) |
+| skosmos | quay.io/natlibfi/skosmos | 9090 | Web UI, REST API, SPARQL proxy |
+
+### Key Configuration Files
+
+- `config/fuseki/skosmos.ttl` -- Fuseki assembler (TDB2 persistent storage + Lucene text index on SKOS labels)
+- `config/skosmos/config.ttl` -- SKOSMOS vocabulary declaration (JenaText dialect, connects via Varnish)
+- `config/varnish/default.vcl` -- Varnish rules (cache GET/sparql, pass through writes/updates)
+
+### Data Flow
+
+1. Vocabulary data authored as RDF/Turtle files in `data/`
+2. Loaded into Fuseki via Graph Store Protocol (`scripts/load-data.sh`)
+3. Stored in named graph `<http://glossary.example.org/>`
+4. SKOSMOS queries Fuseki through Varnish cache for reads
+5. Lucene text index enables fast full-text search on SKOS labels
+
+### Environment Setup
+
+```bash
+cp .env.example .env          # Configure passwords and ports
+docker compose up -d          # Start all services
+./scripts/load-data.sh        # Load vocabulary data
+```
 
 ---
 
 ## Integration Patterns
 
-<!-- TODO: Define REST API patterns, SPARQL endpoint usage, and AI agent integration approach -->
+### REST API (SKOSMOS)
+
+Base URL: `http://localhost:9090/rest/v1/`
+
+| Pattern | Endpoint | Use Case |
+|---------|----------|----------|
+| Search | `GET /rest/v1/{vocid}/search?query=term&lang=en` | Full-text term lookup |
+| Lookup | `GET /rest/v1/{vocid}/lookup?label=term&lang=en` | Exact label match |
+| Concept data | `GET /rest/v1/{vocid}/data?uri=...&lang=en` | Get concept details (JSON-LD) |
+| Hierarchy | `GET /rest/v1/{vocid}/broader?uri=...&lang=en` | Navigate broader terms |
+| Top concepts | `GET /rest/v1/{vocid}/topConcepts?lang=en` | Get category roots |
+
+### SPARQL Endpoint (Fuseki)
+
+URL: `http://localhost:3030/skosmos/sparql`
+
+Supports standard SPARQL 1.1 queries plus Jena text search extensions:
+
+```sparql
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?concept ?label ?definition WHERE {
+  ?concept text:query (skos:prefLabel "deploy*") .
+  ?concept skos:prefLabel ?label .
+  ?concept skos:definition ?definition .
+}
+```
+
+### AI Agent Integration
+
+AI agents consume the glossary via:
+1. **REST API** -- JSON-LD responses for term lookup and search
+2. **SPARQL** -- Complex semantic queries for relationship traversal
+3. **RDF export** -- Full vocabulary dump for offline embedding
 
 ---
 

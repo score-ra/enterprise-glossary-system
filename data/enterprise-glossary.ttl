@@ -1,0 +1,241 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix eg:   <http://glossary.example.org/terms/> .
+
+# ======================================================================
+# Enterprise Glossary - Sample Terms
+# ======================================================================
+# 25 terms across 4 categories with full SKOS relationships:
+#   - skos:broader / skos:narrower (hierarchical)
+#   - skos:related (associative)
+#   - skos:prefLabel, skos:altLabel, skos:hiddenLabel
+#   - skos:definition, skos:example, skos:scopeNote
+# ======================================================================
+
+# ======================================================================
+# Engineering Terms
+# ======================================================================
+
+eg:deployment-pipeline a skos:Concept ;
+    skos:prefLabel "Deployment Pipeline"@en ;
+    skos:altLabel "Deploy Pipeline"@en ;
+    skos:altLabel "Release Pipeline"@en ;
+    skos:definition "An automated sequence of stages that builds, tests, and deploys software from source code to production."@en ;
+    skos:example "Our deployment pipeline runs unit tests, integration tests, builds a Docker image, and deploys to staging before production."@en ;
+    skos:broader eg:engineering ;
+    skos:narrower eg:canary-release ;
+    skos:related eg:ci-cd, eg:staging-environment ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:ci-cd a skos:Concept ;
+    skos:prefLabel "CI/CD"@en ;
+    skos:altLabel "Continuous Integration / Continuous Delivery"@en ;
+    skos:altLabel "Continuous Integration and Continuous Deployment"@en ;
+    skos:hiddenLabel "CICD"@en ;
+    skos:definition "A set of practices that automate the integration of code changes (CI) and the delivery or deployment of those changes to production (CD)."@en ;
+    skos:scopeNote "CI focuses on merging and testing code frequently. CD extends this to automatically deploy validated changes."@en ;
+    skos:broader eg:engineering ;
+    skos:related eg:deployment-pipeline, eg:staging-environment ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:staging-environment a skos:Concept ;
+    skos:prefLabel "Staging Environment"@en ;
+    skos:altLabel "Staging"@en ;
+    skos:altLabel "Pre-production Environment"@en ;
+    skos:hiddenLabel "Pre-prod"@en ;
+    skos:definition "A near-production environment used for final testing and validation before deploying changes to production."@en ;
+    skos:broader eg:engineering ;
+    skos:related eg:deployment-pipeline, eg:canary-release ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:canary-release a skos:Concept ;
+    skos:prefLabel "Canary Release"@en ;
+    skos:altLabel "Canary Deployment"@en ;
+    skos:definition "A deployment strategy that rolls out changes to a small subset of users or servers before full production release, to detect issues early."@en ;
+    skos:broader eg:deployment-pipeline ;
+    skos:related eg:staging-environment ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:microservice a skos:Concept ;
+    skos:prefLabel "Microservice"@en ;
+    skos:altLabel "Micro-service"@en ;
+    skos:definition "An architectural style where an application is composed of small, independently deployable services, each responsible for a specific business capability."@en ;
+    skos:scopeNote "Contrast with monolithic architecture where all functionality is in a single deployable unit."@en ;
+    skos:broader eg:engineering ;
+    skos:related eg:container, eg:load-balancer ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:api a skos:Concept ;
+    skos:prefLabel "API"@en ;
+    skos:altLabel "Application Programming Interface"@en ;
+    skos:definition "A set of defined rules and protocols that allows different software applications to communicate with each other."@en ;
+    skos:broader eg:engineering ;
+    skos:related eg:microservice, eg:sla ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:technical-debt a skos:Concept ;
+    skos:prefLabel "Technical Debt"@en ;
+    skos:altLabel "Tech Debt"@en ;
+    skos:definition "The implied cost of future rework caused by choosing a quick or expedient solution now instead of a more thorough approach."@en ;
+    skos:broader eg:engineering ;
+    skos:related eg:code-review ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Business Terms
+# ======================================================================
+
+eg:sla a skos:Concept ;
+    skos:prefLabel "SLA"@en ;
+    skos:altLabel "Service Level Agreement"@en ;
+    skos:definition "A formal commitment between a service provider and a customer that defines the expected level of service, including metrics like uptime, response time, and resolution time."@en ;
+    skos:broader eg:business ;
+    skos:related eg:kpi, eg:api ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:kpi a skos:Concept ;
+    skos:prefLabel "KPI"@en ;
+    skos:altLabel "Key Performance Indicator"@en ;
+    skos:definition "A measurable value that demonstrates how effectively an organization or team is achieving key business objectives."@en ;
+    skos:example "Monthly recurring revenue (MRR), customer churn rate, and deployment frequency are common KPIs."@en ;
+    skos:broader eg:business ;
+    skos:related eg:okr, eg:sla ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:okr a skos:Concept ;
+    skos:prefLabel "OKR"@en ;
+    skos:altLabel "Objectives and Key Results"@en ;
+    skos:definition "A goal-setting framework that defines objectives (qualitative goals) and key results (quantitative measures of progress toward those objectives)."@en ;
+    skos:broader eg:business ;
+    skos:related eg:kpi, eg:sprint ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:stakeholder a skos:Concept ;
+    skos:prefLabel "Stakeholder"@en ;
+    skos:definition "Any individual, group, or organization that has an interest in or is affected by the outcome of a project or decision."@en ;
+    skos:broader eg:business ;
+    skos:related eg:sprint ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:sprint a skos:Concept ;
+    skos:prefLabel "Sprint"@en ;
+    skos:altLabel "Iteration"@en ;
+    skos:definition "A fixed-length time period (typically 1-4 weeks) during which a team works to complete a set of planned work items."@en ;
+    skos:scopeNote "Commonly used in Scrum and other agile methodologies."@en ;
+    skos:broader eg:business ;
+    skos:related eg:okr, eg:stakeholder ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:runbook a skos:Concept ;
+    skos:prefLabel "Runbook"@en ;
+    skos:altLabel "Operations Runbook"@en ;
+    skos:altLabel "Playbook"@en ;
+    skos:definition "A documented set of step-by-step procedures for handling routine operations or resolving specific incidents."@en ;
+    skos:broader eg:process ;
+    skos:related eg:incident-response, eg:postmortem ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Infrastructure Terms
+# ======================================================================
+
+eg:container a skos:Concept ;
+    skos:prefLabel "Container"@en ;
+    skos:altLabel "Application Container"@en ;
+    skos:hiddenLabel "Docker Container"@en ;
+    skos:definition "A lightweight, standalone executable package that includes everything needed to run a piece of software: code, runtime, system tools, libraries, and settings."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:microservice, eg:load-balancer ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:load-balancer a skos:Concept ;
+    skos:prefLabel "Load Balancer"@en ;
+    skos:altLabel "LB"@en ;
+    skos:definition "A device or service that distributes incoming network traffic across multiple servers to ensure no single server is overwhelmed."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:cdn, eg:microservice, eg:container ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:cdn a skos:Concept ;
+    skos:prefLabel "CDN"@en ;
+    skos:altLabel "Content Delivery Network"@en ;
+    skos:definition "A geographically distributed network of servers that delivers web content and assets to users from the nearest server location to reduce latency."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:load-balancer, eg:dns ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:dns a skos:Concept ;
+    skos:prefLabel "DNS"@en ;
+    skos:altLabel "Domain Name System"@en ;
+    skos:definition "The hierarchical naming system that translates human-readable domain names into IP addresses that computers use to identify each other on the network."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:cdn, eg:load-balancer ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:vpn a skos:Concept ;
+    skos:prefLabel "VPN"@en ;
+    skos:altLabel "Virtual Private Network"@en ;
+    skos:definition "A technology that creates a secure, encrypted connection over a less secure network, such as the internet, to protect data in transit."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:dns ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:observability a skos:Concept ;
+    skos:prefLabel "Observability"@en ;
+    skos:altLabel "o11y"@en ;
+    skos:definition "The ability to understand the internal state of a system by examining its outputs, typically through logs, metrics, and traces."@en ;
+    skos:broader eg:infrastructure ;
+    skos:related eg:incident-response, eg:sla ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Process Terms
+# ======================================================================
+
+eg:code-review a skos:Concept ;
+    skos:prefLabel "Code Review"@en ;
+    skos:altLabel "Peer Review"@en ;
+    skos:altLabel "PR Review"@en ;
+    skos:definition "A systematic examination of source code by one or more developers other than the author, intended to find defects and improve code quality."@en ;
+    skos:broader eg:process ;
+    skos:related eg:ci-cd, eg:technical-debt ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:incident-response a skos:Concept ;
+    skos:prefLabel "Incident Response"@en ;
+    skos:altLabel "IR"@en ;
+    skos:definition "The organized approach to addressing and managing the aftermath of a security breach or service disruption, aimed at limiting damage and reducing recovery time."@en ;
+    skos:broader eg:process ;
+    skos:narrower eg:postmortem ;
+    skos:related eg:runbook, eg:sla, eg:observability ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:postmortem a skos:Concept ;
+    skos:prefLabel "Postmortem"@en ;
+    skos:altLabel "Post-incident Review"@en ;
+    skos:altLabel "Retrospective"@en ;
+    skos:hiddenLabel "Post-mortem"@en ;
+    skos:definition "A structured review conducted after an incident or project to analyze what happened, identify root causes, and document lessons learned to prevent recurrence."@en ;
+    skos:broader eg:incident-response ;
+    skos:related eg:runbook ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:change-management a skos:Concept ;
+    skos:prefLabel "Change Management"@en ;
+    skos:altLabel "Change Control"@en ;
+    skos:definition "A systematic approach to transitioning individuals, teams, and organizations from a current state to a desired future state, or the process for requesting, reviewing, and approving changes to systems."@en ;
+    skos:broader eg:process ;
+    skos:related eg:incident-response, eg:deployment-pipeline ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:on-call a skos:Concept ;
+    skos:prefLabel "On-Call"@en ;
+    skos:altLabel "On-Call Rotation"@en ;
+    skos:altLabel "Pager Duty"@en ;
+    skos:definition "A scheduled responsibility where designated team members are available outside regular hours to respond to incidents and urgent issues."@en ;
+    skos:broader eg:process ;
+    skos:related eg:incident-response, eg:runbook ;
+    skos:inScheme eg:enterprise-glossary .

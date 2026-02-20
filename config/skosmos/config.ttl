@@ -1,0 +1,67 @@
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix dc11: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosmos: <http://purl.org/net/skosmos#> .
+@prefix isothes: <http://purl.org/iso25964/skos-thes#> .
+@prefix mdrtype: <http://publications.europa.eu/resource/authority/dataset-type/> .
+@prefix : <#> .
+
+# ======== Global Configuration ========
+
+skosmos:config a skosmos:Configuration ;
+
+    # SPARQL endpoint -- routes through Varnish cache
+    skosmos:sparqlEndpoint <http://fuseki-cache:80/skosmos/sparql> ;
+
+    # Use Jena text search (requires Lucene index on Fuseki)
+    skosmos:sparqlDialect "JenaText" ;
+
+    # Timeouts
+    skosmos:sparqlTimeout 20 ;
+    skosmos:httpTimeout 5 ;
+
+    # Service identity
+    skosmos:serviceName "Enterprise Glossary" ;
+
+    # Interface languages
+    skosmos:languages (
+        [ rdfs:label "English" ; rdf:value "en" ]
+    ) ;
+
+    # Search settings
+    skosmos:searchResultsSize 20 ;
+
+    # UI settings
+    skosmos:uiLanguageDropdown false ;
+
+    # Template cache
+    skosmos:templateCache "/tmp/skosmos-template-cache" .
+
+# ======== Vocabulary: Enterprise Glossary ========
+
+:enterprise-glossary a skosmos:Vocabulary , void:Dataset ;
+    dc:title "Enterprise Glossary"@en ;
+    dc:subject :cat_general ;
+    dc:type mdrtype:THESAURUS ;
+    void:uriSpace "http://glossary.example.org/terms/" ;
+    skosmos:language "en" ;
+    skosmos:defaultLanguage "en" ;
+    skosmos:showTopConcepts true ;
+    skosmos:showDeprecated false ;
+    skosmos:showStatistics true ;
+    void:sparqlEndpoint <http://fuseki-cache:80/skosmos/sparql> ;
+    skosmos:sparqlGraph <http://glossary.example.org/> .
+
+# ======== Vocabulary Categories ========
+
+:cat_general a skos:Concept ;
+    skos:prefLabel "General"@en ;
+    skos:inScheme :categories .
+
+:categories a skos:ConceptScheme ;
+    skos:prefLabel "Vocabulary Categories"@en .
