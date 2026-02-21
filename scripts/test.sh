@@ -104,6 +104,14 @@ else
     echo "SKIPPING: RBAC Tests (gateway not running at $GATEWAY_URL)"
 fi
 
+# E2E tests (only if all services including gateway are running)
+if curl -sf "$GATEWAY_URL/health" > /dev/null 2>&1; then
+    run_test "End-to-End Tests" "$PROJECT_DIR/tests/test-e2e.sh"
+else
+    echo ""
+    echo "SKIPPING: E2E Tests (gateway not running at $GATEWAY_URL)"
+fi
+
 echo ""
 echo "=========================================="
 echo " FINAL RESULTS"
