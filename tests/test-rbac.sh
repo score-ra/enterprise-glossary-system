@@ -85,18 +85,27 @@ HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
     -X POST "$GATEWAY_URL/fuseki/upload")
 assert_http "File upload requires auth" "401" "$HTTP_CODE"
 
-# Test 7: Write endpoint WITH valid credentials
+# Test 7: Write endpoint WITH valid credentials (uses env vars or defaults)
 echo "Test: SPARQL update with valid editor credentials"
+EDITOR_USER="${EGMS_EDITOR_USER:-editor}"
+EDITOR_PASS="${EGMS_EDITOR_PASS:-editor123}"
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-    -u "${EGMS_EDITOR_USER:-editor}:${EGMS_EDITOR_PASS:-editor}" \
+    -u "$EDITOR_USER:$EDITOR_PASS" \
     -X POST \
     -H "Content-Type: application/sparql-update" \
-    -d "ASK { ?s ?p ?o }" \
+    -d "INSERT DATA { <http://egms-test/rbac-check> <http://egms-test/verified> \"true\" }" \
     "$GATEWAY_URL/fuseki/update" 2>/dev/null || echo "000")
-# Accept any non-401 response (could be 200, 400 for bad query, etc.)
+# Accept any non-401 response (could be 200, 400, etc. -- means auth passed)
 if [ "$HTTP_CODE" != "401" ] && [ "$HTTP_CODE" != "000" ]; then
     echo "  PASS: Authenticated write accepted (HTTP $HTTP_CODE)"
     PASS=$((PASS + 1))
+    # Clean up test data
+    curl -s -o /dev/null \
+        -u "$EDITOR_USER:$EDITOR_PASS" \
+        -X POST \
+        -H "Content-Type: application/sparql-update" \
+        -d "DELETE DATA { <http://egms-test/rbac-check> <http://egms-test/verified> \"true\" }" \
+        "$GATEWAY_URL/fuseki/update" 2>/dev/null
 else
     echo "  FAIL: Authenticated write rejected (HTTP $HTTP_CODE) -- auth file may not be set up"
     FAIL=$((FAIL + 1))
