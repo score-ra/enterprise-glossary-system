@@ -50,8 +50,7 @@
 :index_lucene a text:TextIndexLucene ;
     text:directory "/fuseki-base/databases/skosmos-lucene" ;
     text:entityMap :entity_map ;
-    text:storeValues true ;
-    text:multilingualSupport true .
+    text:storeValues true .
 
 # ======== Entity Map ========
 # Each SKOS label property gets its own Lucene field name.

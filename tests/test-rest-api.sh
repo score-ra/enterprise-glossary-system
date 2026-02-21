@@ -40,9 +40,9 @@ assert_contains() {
 echo "=== REST API Tests ==="
 echo ""
 
-# Test 1: SKOSMOS home page
+# Test 1: SKOSMOS home page (follows redirect to /en/)
 echo "Test: SKOSMOS home page loads"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$SKOSMOS_URL/")
 assert_http_ok "Home page accessible" "$HTTP_CODE"
 
 # Test 2: REST API vocabularies endpoint
@@ -52,11 +52,11 @@ HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/vocabul
 assert_http_ok "Vocabularies endpoint responds" "$HTTP_CODE"
 assert_contains "Enterprise Glossary listed" "$RESPONSE" "Enterprise Glossary"
 
-# Test 3: Vocabulary info
-echo "Test: Vocabulary info"
-RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/?lang=en")
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/$VOCAB_ID/?lang=en")
-assert_http_ok "Vocabulary info endpoint responds" "$HTTP_CODE"
+# Test 3: Vocabulary statistics
+echo "Test: Vocabulary statistics"
+RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/vocabularyStatistics?lang=en")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/$VOCAB_ID/vocabularyStatistics?lang=en")
+assert_http_ok "Vocabulary statistics endpoint responds" "$HTTP_CODE"
 
 # Test 4: Top concepts
 echo "Test: Top concepts"

@@ -42,27 +42,31 @@ assert_http_ok() {
 echo "=== Search Tests ==="
 echo ""
 
-# Test 1: SKOSMOS REST search for "deployment"
-echo "Test: REST API search for 'deployment'"
-RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=deployment&lang=en")
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=deployment&lang=en")
+# Note: SKOSMOS uses LowerCaseKeywordAnalyzer which treats labels as whole tokens.
+# Use wildcard suffix (*) for partial matches, or exact labels for exact matches.
+# The SKOSMOS web UI appends * automatically.
+
+# Test 1: SKOSMOS REST search with wildcard (matches how UI works)
+echo "Test: REST API search for 'deploy*'"
+RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=deploy*&lang=en")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=deploy*&lang=en")
 assert_http_ok "Search endpoint responds" "$HTTP_CODE"
 assert_contains "Search finds Deployment Pipeline" "$RESPONSE" "Deployment Pipeline"
 
-# Test 2: Search for acronym (SLA)
+# Test 2: Search for exact acronym (SLA)
 echo "Test: Search for acronym 'SLA'"
 RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=SLA&lang=en")
 assert_contains "Search finds SLA" "$RESPONSE" "SLA"
 
-# Test 3: Search for altLabel
-echo "Test: Search for altLabel 'CICD'"
-RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=CICD&lang=en")
-assert_contains "Search finds CI/CD via hidden label" "$RESPONSE" "CI/CD"
+# Test 3: Search for hiddenLabel with wildcard
+echo "Test: Search for hiddenLabel 'CICD*'"
+RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/$VOCAB_ID/search?query=CICD*&lang=en")
+assert_contains "Search finds CI/CD via hidden label" "$RESPONSE" "ci-cd"
 
 # Test 4: Global search across vocabularies
-echo "Test: Global search for 'container'"
-RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/search?query=container&lang=en")
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/search?query=container&lang=en")
+echo "Test: Global search for 'container*'"
+RESPONSE=$(curl -s "$SKOSMOS_URL/rest/v1/search?query=container*&lang=en")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SKOSMOS_URL/rest/v1/search?query=container*&lang=en")
 assert_http_ok "Global search responds" "$HTTP_CODE"
 assert_contains "Global search finds Container" "$RESPONSE" "Container"
 

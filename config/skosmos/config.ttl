@@ -30,7 +30,7 @@ skosmos:config a skosmos:Configuration ;
 
     # Interface languages
     skosmos:languages (
-        [ rdfs:label "English" ; rdf:value "en" ]
+        [ rdfs:label "en" ; rdf:value "en_GB.utf8" ]
     ) ;
 
     # Search settings
@@ -38,6 +38,9 @@ skosmos:config a skosmos:Configuration ;
 
     # UI settings
     skosmos:uiLanguageDropdown false ;
+
+    # Logging
+    skosmos:logCaughtExceptions true ;
 
     # Template cache
     skosmos:templateCache "/tmp/skosmos-template-cache" .

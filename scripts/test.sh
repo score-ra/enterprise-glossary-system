@@ -84,9 +84,9 @@ if ! curl -sf "$FUSEKI_URL/\$/ping" > /dev/null 2>&1; then
     exit 1
 fi
 
-if ! curl -sf "$SKOSMOS_URL/" > /dev/null 2>&1; then
+if ! curl -sf -L "$SKOSMOS_URL/" > /dev/null 2>&1; then
     echo "ERROR: SKOSMOS not reachable at $SKOSMOS_URL"
-    echo "Start services with: docker-compose up -d"
+    echo "Start services with: docker compose up -d"
     exit 1
 fi
 
