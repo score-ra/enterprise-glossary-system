@@ -93,6 +93,16 @@ fi
 run_test "SPARQL Query Tests" "$PROJECT_DIR/tests/test-sparql-queries.sh"
 run_test "REST API Tests" "$PROJECT_DIR/tests/test-rest-api.sh"
 run_test "Search Tests" "$PROJECT_DIR/tests/test-search.sh"
+run_test "Multilingual Tests" "$PROJECT_DIR/tests/test-multilingual.sh"
+
+# RBAC tests (only if gateway is running)
+GATEWAY_URL="${GATEWAY_URL:-http://localhost:8080}"
+if curl -sf "$GATEWAY_URL/health" > /dev/null 2>&1; then
+    run_test "RBAC Tests" "$PROJECT_DIR/tests/test-rbac.sh"
+else
+    echo ""
+    echo "SKIPPING: RBAC Tests (gateway not running at $GATEWAY_URL)"
+fi
 
 echo ""
 echo "=========================================="

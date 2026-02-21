@@ -14,11 +14,13 @@
 
 eg:enterprise-glossary a skos:ConceptScheme ;
     skos:prefLabel "Enterprise Glossary"@en ;
+    skos:prefLabel "Glosario Empresarial"@es ;
+    skos:prefLabel "Glossaire d'Entreprise"@fr ;
     dct:title "Enterprise Glossary Management System Vocabulary"@en ;
     dct:description "Centralized, URI-based glossary of standardized organizational terminology."@en ;
     dct:creator "EGMS Team" ;
     dct:created "2026-02-20"^^xsd:date ;
-    dct:modified "2026-02-20"^^xsd:date ;
+    dct:modified "2026-02-21"^^xsd:date ;
     skos:hasTopConcept eg:engineering ,
                        eg:business ,
                        eg:infrastructure ,
@@ -30,24 +32,40 @@ eg:enterprise-glossary a skos:ConceptScheme ;
 
 eg:engineering a skos:Concept ;
     skos:prefLabel "Engineering"@en ;
+    skos:prefLabel "Ingenieria"@es ;
+    skos:prefLabel "Ingenierie"@fr ;
     skos:definition "Concepts related to software engineering practices, tools, and workflows."@en ;
+    skos:definition "Conceptos relacionados con practicas, herramientas y flujos de trabajo de ingenieria de software."@es ;
+    skos:definition "Concepts lies aux pratiques, outils et flux de travail du genie logiciel."@fr ;
     skos:topConceptOf eg:enterprise-glossary ;
     skos:inScheme eg:enterprise-glossary .
 
 eg:business a skos:Concept ;
     skos:prefLabel "Business"@en ;
+    skos:prefLabel "Negocios"@es ;
+    skos:prefLabel "Affaires"@fr ;
     skos:definition "Concepts related to business operations, metrics, and management."@en ;
+    skos:definition "Conceptos relacionados con operaciones comerciales, metricas y gestion."@es ;
+    skos:definition "Concepts lies aux operations commerciales, aux metriques et a la gestion."@fr ;
     skos:topConceptOf eg:enterprise-glossary ;
     skos:inScheme eg:enterprise-glossary .
 
 eg:infrastructure a skos:Concept ;
     skos:prefLabel "Infrastructure"@en ;
+    skos:prefLabel "Infraestructura"@es ;
+    skos:prefLabel "Infrastructure"@fr ;
     skos:definition "Concepts related to IT infrastructure, networking, and platform services."@en ;
+    skos:definition "Conceptos relacionados con infraestructura de TI, redes y servicios de plataforma."@es ;
+    skos:definition "Concepts lies a l'infrastructure informatique, aux reseaux et aux services de plateforme."@fr ;
     skos:topConceptOf eg:enterprise-glossary ;
     skos:inScheme eg:enterprise-glossary .
 
 eg:process a skos:Concept ;
     skos:prefLabel "Process"@en ;
+    skos:prefLabel "Proceso"@es ;
+    skos:prefLabel "Processus"@fr ;
     skos:definition "Concepts related to organizational processes, workflows, and operational practices."@en ;
+    skos:definition "Conceptos relacionados con procesos organizacionales, flujos de trabajo y practicas operativas."@es ;
+    skos:definition "Concepts lies aux processus organisationnels, aux flux de travail et aux pratiques operationnelles."@fr ;
     skos:topConceptOf eg:enterprise-glossary ;
     skos:inScheme eg:enterprise-glossary .

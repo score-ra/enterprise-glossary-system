@@ -31,13 +31,15 @@ skosmos:config a skosmos:Configuration ;
     # Interface languages
     skosmos:languages (
         [ rdfs:label "en" ; rdf:value "en_GB.utf8" ]
+        [ rdfs:label "es" ; rdf:value "es_ES.utf8" ]
+        [ rdfs:label "fr" ; rdf:value "fr_FR.utf8" ]
     ) ;
 
     # Search settings
     skosmos:searchResultsSize 20 ;
 
     # UI settings
-    skosmos:uiLanguageDropdown false ;
+    skosmos:uiLanguageDropdown true ;
 
     # Logging
     skosmos:logCaughtExceptions true ;
@@ -49,10 +51,12 @@ skosmos:config a skosmos:Configuration ;
 
 :enterprise-glossary a skosmos:Vocabulary , void:Dataset ;
     dc:title "Enterprise Glossary"@en ;
+    dc:title "Glosario Empresarial"@es ;
+    dc:title "Glossaire d'Entreprise"@fr ;
     dc:subject :cat_general ;
     dc:type mdrtype:THESAURUS ;
     void:uriSpace "http://glossary.example.org/terms/" ;
-    skosmos:language "en" ;
+    skosmos:language "en", "es", "fr" ;
     skosmos:defaultLanguage "en" ;
     skosmos:showTopConcepts true ;
     skosmos:showDeprecated false ;

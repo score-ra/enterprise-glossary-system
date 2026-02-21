@@ -1,0 +1,77 @@
+name: Validate SKOS Vocabularies
+
+on:
+  push:
+    paths:
+      - 'data/**'
+      - 'scripts/validate-skos.py'
+      - '.github/workflows/validate.yml'
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'scripts/validate-skos.py'
+
+jobs:
+  validate:
+    name: SKOS Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Validate SKOS files
+        run: python scripts/validate-skos.py data/*.ttl
+
+  docker-smoke:
+    name: Docker Compose Smoke Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env from example
+        run: cp .env.example .env && sed -i 's/your-admin-password-here/admin123/g' .env
+
+      - name: Start services
+        run: docker compose up -d
+
+      - name: Wait for services to be healthy
+        run: |
+          echo "Waiting for Fuseki..."
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:3030/$/ping > /dev/null 2>&1; then
+              echo "Fuseki is ready"
+              break
+            fi
+            sleep 2
+          done
+
+          echo "Waiting for SKOSMOS..."
+          for i in $(seq 1 60); do
+            if curl -sf -L http://localhost:9090/ > /dev/null 2>&1; then
+              echo "SKOSMOS is ready"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Load data
+        run: ./scripts/load-data.sh
+
+      - name: Run integration tests
+        run: ./scripts/test.sh
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs

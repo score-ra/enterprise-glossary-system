@@ -10,6 +10,8 @@ Enterprise Glossary Management System (EGMS) — a centralized, URI-based glossa
 - **Storage:** Apache Jena Fuseki (RDF triple store / SPARQL endpoint)
 - **Data Format:** SKOS (RDF/Turtle)
 - **Cache:** Varnish (HTTP cache for SPARQL reads)
+- **Gateway:** Nginx (reverse proxy with RBAC)
+- **CI/CD:** GitHub Actions (SKOS validation on push)
 - **Infrastructure:** Docker Compose (local), cloud hosting (production)
 
 ## Quick Start
@@ -78,14 +80,20 @@ docker compose up -d && docker compose ps
 | `README.md` | Project overview and setup |
 | `docs/prds/prd.md` | Product Requirements Document |
 | `docs/design-architecture.md` | Technical design guide |
-| `docker-compose.yml` | Service definitions (Fuseki + Varnish + SKOSMOS) |
+| `docker-compose.yml` | Service definitions (Fuseki + Varnish + SKOSMOS + Nginx) |
 | `config/fuseki/skosmos.ttl` | Fuseki assembler (TDB2 + Lucene) |
-| `config/skosmos/config.ttl` | SKOSMOS vocabulary config |
+| `config/skosmos/config.ttl` | SKOSMOS vocabulary config (multilingual) |
 | `config/varnish/default.vcl` | Varnish cache rules |
-| `data/enterprise-glossary.ttl` | Sample vocabulary terms |
+| `config/nginx/nginx.conf` | Gateway reverse proxy with RBAC |
+| `data/enterprise-glossary.ttl` | Sample vocabulary terms (en/es/fr) |
 | `scripts/load-data.sh` | Load data into Fuseki |
 | `scripts/validate-skos.py` | Validate SKOS files |
 | `scripts/test.sh` | Run integration tests |
+| `scripts/setup-auth.sh` | Generate RBAC htpasswd files |
+| `scripts/snapshot.sh` | Create versioned glossary snapshot |
+| `scripts/audit-log.py` | Compare snapshots for audit trail |
+| `scripts/backup.sh` | Automated backup with retention |
+| `scripts/health-check.sh` | Service health monitoring |
 
 ## Project Structure
 
@@ -95,14 +103,20 @@ enterprise-glossary-system/
 ├── README.md                      # Project overview and setup
 ├── start-here.md                  # Session context
 ├── .env.example                   # Environment variable template
-├── docker-compose.yml             # SKOSMOS + Fuseki + Varnish services
+├── docker-compose.yml             # Fuseki + Varnish + SKOSMOS + Nginx
+├── .github/
+│   ├── workflows/validate.yml     # CI/CD: SKOS validation + smoke tests
+│   └── pull_request_template.md   # PR template
 ├── config/
 │   ├── fuseki/skosmos.ttl         # Fuseki assembler (TDB2 + Lucene index)
-│   ├── skosmos/config.ttl         # SKOSMOS vocabulary configuration
-│   └── varnish/default.vcl        # Varnish cache rules
+│   ├── skosmos/config.ttl         # SKOSMOS vocabulary config (multilingual)
+│   ├── varnish/default.vcl        # Varnish cache rules
+│   └── nginx/
+│       ├── nginx.conf             # Reverse proxy + RBAC rules
+│       └── auth/                  # htpasswd files (generated)
 ├── data/
 │   ├── concept-scheme.ttl         # SKOS concept scheme + top categories
-│   ├── enterprise-glossary.ttl    # 25 sample terms with relationships
+│   ├── enterprise-glossary.ttl    # 25 sample terms (en/es/fr)
 │   └── template.csv               # CSV template for bulk import
 ├── scripts/
 │   ├── load-data.sh               # Load Turtle files into Fuseki
@@ -111,11 +125,18 @@ enterprise-glossary-system/
 │   ├── csv-to-skos.py             # Convert CSV to SKOS Turtle
 │   ├── skos-to-csv.py             # Export SKOS to CSV
 │   ├── test.sh                    # Run all integration tests
+│   ├── setup-auth.sh              # Generate RBAC htpasswd files
+│   ├── snapshot.sh                # Create versioned glossary snapshot
+│   ├── audit-log.py               # Compare snapshots for audit trail
+│   ├── backup.sh                  # Automated backup with retention
+│   ├── health-check.sh            # Service health monitoring
 │   └── requirements.txt           # Python dependencies
 ├── tests/
 │   ├── test-sparql-queries.sh     # SPARQL endpoint tests
 │   ├── test-rest-api.sh           # SKOSMOS REST API tests
-│   └── test-search.sh             # Search functionality tests
+│   ├── test-search.sh             # Search functionality tests
+│   ├── test-multilingual.sh       # Multilingual label tests
+│   └── test-rbac.sh               # RBAC enforcement tests
 ├── docs/
 │   ├── design-architecture.md     # Technical design guide
 │   └── prds/prd.md                # Product Requirements Document

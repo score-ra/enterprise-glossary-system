@@ -21,9 +21,13 @@
 
 eg:deployment-pipeline a skos:Concept ;
     skos:prefLabel "Deployment Pipeline"@en ;
+    skos:prefLabel "Pipeline de Despliegue"@es ;
+    skos:prefLabel "Pipeline de Deploiement"@fr ;
     skos:altLabel "Deploy Pipeline"@en ;
     skos:altLabel "Release Pipeline"@en ;
     skos:definition "An automated sequence of stages that builds, tests, and deploys software from source code to production."@en ;
+    skos:definition "Una secuencia automatizada de etapas que construye, prueba y despliega software desde el codigo fuente a produccion."@es ;
+    skos:definition "Une sequence automatisee d'etapes qui construit, teste et deploie le logiciel du code source a la production."@fr ;
     skos:example "Our deployment pipeline runs unit tests, integration tests, builds a Docker image, and deploys to staging before production."@en ;
     skos:broader eg:engineering ;
     skos:narrower eg:canary-release ;
@@ -32,10 +36,16 @@ eg:deployment-pipeline a skos:Concept ;
 
 eg:ci-cd a skos:Concept ;
     skos:prefLabel "CI/CD"@en ;
+    skos:prefLabel "CI/CD"@es ;
+    skos:prefLabel "CI/CD"@fr ;
     skos:altLabel "Continuous Integration / Continuous Delivery"@en ;
     skos:altLabel "Continuous Integration and Continuous Deployment"@en ;
+    skos:altLabel "Integracion Continua / Entrega Continua"@es ;
+    skos:altLabel "Integration Continue / Livraison Continue"@fr ;
     skos:hiddenLabel "CICD"@en ;
     skos:definition "A set of practices that automate the integration of code changes (CI) and the delivery or deployment of those changes to production (CD)."@en ;
+    skos:definition "Un conjunto de practicas que automatizan la integracion de cambios de codigo (CI) y la entrega o despliegue de esos cambios a produccion (CD)."@es ;
+    skos:definition "Un ensemble de pratiques qui automatisent l'integration des modifications de code (CI) et la livraison ou le deploiement de ces modifications en production (CD)."@fr ;
     skos:scopeNote "CI focuses on merging and testing code frequently. CD extends this to automatically deploy validated changes."@en ;
     skos:broader eg:engineering ;
     skos:related eg:deployment-pipeline, eg:staging-environment ;
@@ -61,8 +71,12 @@ eg:canary-release a skos:Concept ;
 
 eg:microservice a skos:Concept ;
     skos:prefLabel "Microservice"@en ;
+    skos:prefLabel "Microservicio"@es ;
+    skos:prefLabel "Microservice"@fr ;
     skos:altLabel "Micro-service"@en ;
     skos:definition "An architectural style where an application is composed of small, independently deployable services, each responsible for a specific business capability."@en ;
+    skos:definition "Un estilo arquitectonico donde una aplicacion se compone de servicios pequenos e independientes, cada uno responsable de una capacidad de negocio especifica."@es ;
+    skos:definition "Un style architectural ou une application est composee de petits services deployables independamment, chacun responsable d'une capacite metier specifique."@fr ;
     skos:scopeNote "Contrast with monolithic architecture where all functionality is in a single deployable unit."@en ;
     skos:broader eg:engineering ;
     skos:related eg:container, eg:load-balancer ;
@@ -70,8 +84,14 @@ eg:microservice a skos:Concept ;
 
 eg:api a skos:Concept ;
     skos:prefLabel "API"@en ;
+    skos:prefLabel "API"@es ;
+    skos:prefLabel "API"@fr ;
     skos:altLabel "Application Programming Interface"@en ;
+    skos:altLabel "Interfaz de Programacion de Aplicaciones"@es ;
+    skos:altLabel "Interface de Programmation d'Applications"@fr ;
     skos:definition "A set of defined rules and protocols that allows different software applications to communicate with each other."@en ;
+    skos:definition "Un conjunto de reglas y protocolos definidos que permite que diferentes aplicaciones de software se comuniquen entre si."@es ;
+    skos:definition "Un ensemble de regles et de protocoles definis qui permet a differentes applications logicielles de communiquer entre elles."@fr ;
     skos:broader eg:engineering ;
     skos:related eg:microservice, eg:sla ;
     skos:inScheme eg:enterprise-glossary .
@@ -90,8 +110,14 @@ eg:technical-debt a skos:Concept ;
 
 eg:sla a skos:Concept ;
     skos:prefLabel "SLA"@en ;
+    skos:prefLabel "SLA"@es ;
+    skos:prefLabel "SLA"@fr ;
     skos:altLabel "Service Level Agreement"@en ;
+    skos:altLabel "Acuerdo de Nivel de Servicio"@es ;
+    skos:altLabel "Accord de Niveau de Service"@fr ;
     skos:definition "A formal commitment between a service provider and a customer that defines the expected level of service, including metrics like uptime, response time, and resolution time."@en ;
+    skos:definition "Un compromiso formal entre un proveedor de servicios y un cliente que define el nivel esperado de servicio."@es ;
+    skos:definition "Un engagement formel entre un fournisseur de services et un client qui definit le niveau de service attendu."@fr ;
     skos:broader eg:business ;
     skos:related eg:kpi, eg:api ;
     skos:inScheme eg:enterprise-glossary .
@@ -144,9 +170,13 @@ eg:runbook a skos:Concept ;
 
 eg:container a skos:Concept ;
     skos:prefLabel "Container"@en ;
+    skos:prefLabel "Contenedor"@es ;
+    skos:prefLabel "Conteneur"@fr ;
     skos:altLabel "Application Container"@en ;
     skos:hiddenLabel "Docker Container"@en ;
     skos:definition "A lightweight, standalone executable package that includes everything needed to run a piece of software: code, runtime, system tools, libraries, and settings."@en ;
+    skos:definition "Un paquete ejecutable ligero e independiente que incluye todo lo necesario para ejecutar un software."@es ;
+    skos:definition "Un package executable leger et autonome qui comprend tout le necessaire pour executer un logiciel."@fr ;
     skos:broader eg:infrastructure ;
     skos:related eg:microservice, eg:load-balancer ;
     skos:inScheme eg:enterprise-glossary .
