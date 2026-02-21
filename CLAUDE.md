@@ -34,12 +34,8 @@ python scripts/validate-skos.py data/*.ttl
 
 ## Session Management
 
-### Always Start Here
-1. **Read** [start-here.md](start-here.md) for current context
 2. **Verify** Docker services are running
 
-### Always End Here
-1. **Update** [start-here.md](start-here.md) with:
    - Completed tasks
    - Files modified
    - Next steps
@@ -69,14 +65,12 @@ python scripts/validate-skos.py data/*.ttl
 # 3. Verify Docker services start cleanly
 docker compose up -d && docker compose ps
 
-# 4. Update start-here.md
 ```
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `start-here.md` | Session context - READ FIRST |
 | `README.md` | Project overview and setup |
 | `docs/prds/prd.md` | Product Requirements Document |
 | `docs/design-architecture.md` | Technical design guide |
@@ -101,7 +95,6 @@ docker compose up -d && docker compose ps
 enterprise-glossary-system/
 ├── CLAUDE.md                      # AI assistant instructions (this file)
 ├── README.md                      # Project overview and setup
-├── start-here.md                  # Session context
 ├── .env.example                   # Environment variable template
 ├── docker-compose.yml             # Fuseki + Varnish + SKOSMOS + Nginx
 ├── .github/

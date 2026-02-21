@@ -121,7 +121,6 @@ python scripts/skos-to-csv.py data/*.ttl -o export.csv
 enterprise-glossary-system/
 |-- CLAUDE.md                      # AI assistant instructions
 |-- README.md                      # This file
-|-- start-here.md                  # Session context (read first)
 |-- .env.example                   # Environment variable template
 |-- docker-compose.yml             # Fuseki + Varnish + SKOSMOS + Nginx
 |-- .github/
