@@ -26,7 +26,7 @@ Core concepts exist today and contain the bulk of terms. Vertical concepts are a
 ## Hierarchy Diagram
 
 ```mermaid
-graph TD
+graph LR
     SCHEME["<b>Enterprise Glossary</b><br/>Concept Scheme"]
 
     %% Core concepts
