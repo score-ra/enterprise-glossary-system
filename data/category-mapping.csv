@@ -1,0 +1,388 @@
+source_category,egms_slug
+Access Control,platform-services
+Accessibility,software-development
+Accounting,accounting
+Acquisition Metrics,marketing-seo
+Action Metrics,marketing-seo
+Agile,product-management
+Analysis,data-management
+Analytics,data-management
+API Management,software-development
+Appraisal,valuation-finance
+Architecture,software-development
+Artificial Intelligence,ai-machine-learning
+Assets,valuation-finance
+Attendance Metrics,marketing-seo
+Attribution Metrics,marketing-seo
+Automation,operations
+Automation Metrics,marketing-seo
+Automation Performance,marketing-seo
+Availability,platform-services
+Awareness Marketing,marketing-seo
+Booking Metrics,marketing-seo
+Booking Performance,marketing-seo
+Booking Success,marketing-seo
+Brand Management,marketing-seo
+Business,strategy-planning
+Business Formation,strategy-planning
+Business Information,strategy-planning
+Business Intelligence,data-management
+Business Metrics,strategy-planning
+Business Model,strategy-planning
+Business Planning,strategy-planning
+Business Services,service-design
+Business Strategy,strategy-planning
+Business Tools,strategy-planning
+Business Types,strategy-planning
+Calendar Management,operations
+Campaign Performance,marketing-seo
+Channel Analysis,marketing-seo
+Channel Performance,marketing-seo
+Client Behavior,marketing-seo
+Client Services,service-design
+Cloud Services,platform-services
+Code Quality,software-development
+Code Reuse,software-development
+Collaboration,operations
+Commercial Real Estate,leasing-tenancy
+Communication,operations
+Communication Efficiency,marketing-seo
+Communication Metrics,marketing-seo
+Communication Performance,marketing-seo
+Communications,marketing-seo
+Company Type,strategy-planning
+Competition,strategy-planning
+Competitive Analysis,strategy-planning
+Competitive Edge,strategy-planning
+Competitive Strategy,strategy-planning
+Compliance,operations
+Computer Science,software-development
+Consideration Marketing,marketing-seo
+Construction,property-management
+Consumption Model,service-design
+Contact Classification,marketing-seo
+Container Orchestration,platform-services
+Containerization,platform-services
+Content Creation,marketing-seo
+Content Management,marketing-seo
+Content Marketing,marketing-seo
+Content Optimization,marketing-seo
+Content Performance,marketing-seo
+Content Quality,marketing-seo
+Content Strategy,marketing-seo
+Conversion,marketing-seo
+Conversion Costs,marketing-seo
+Conversion Marketing,marketing-seo
+Conversion Metrics,marketing-seo
+Corporate Governance,strategy-planning
+Coverage Metrics,marketing-seo
+Crawl Management,marketing-seo
+Customer,marketing-seo
+Customer Advocacy,marketing-seo
+Customer Behavior,marketing-seo
+Customer Experience,service-design
+Customer Insights,marketing-seo
+Customer Journey,marketing-seo
+Customer Segmentation,marketing-seo
+Customer Segments,marketing-seo
+Customer Service,service-design
+Customer Success,service-design
+Customer Targeting,marketing-seo
+Customer Value,marketing-seo
+Cybersecurity,platform-services
+Data Analysis,data-management
+Data Format,data-management
+Data Management,data-management
+Data Organization,data-management
+Data Processing,data-management
+Data Protection,data-management
+Data Storage,data-management
+Data Types,data-management
+Database,data-management
+Database Design,data-management
+Database Metrics,data-management
+Deliverability Metrics,marketing-seo
+Delivery Management,service-design
+Delivery Strategy,service-design
+Deployment,software-development
+Design,software-development
+Design Pattern,software-development
+Development,software-development
+Development Model,software-development
+Development Platform,software-development
+Development Process,software-development
+Development Tools,software-development
+DevOps,platform-services
+Digital Marketing,marketing-seo
+Discovery,marketing-seo
+Documentation,operations
+Domain Analysis,marketing-seo
+Efficiency,operations
+Efficiency Indicators,operations
+Efficiency Metrics,operations
+Email Marketing,marketing-seo
+Engagement Metrics,marketing-seo
+Engineering,software-development
+Environmental,property-management
+Equity,strategy-planning
+Estimation,strategy-planning
+Experimentation,product-management
+Facilities,property-management
+Finance,strategy-planning
+Financial Metrics,strategy-planning
+Financial Performance,strategy-planning
+Forecast Metrics,marketing-seo
+Frontend,software-development
+Funding,strategy-planning
+Funnel Progression,marketing-seo
+Funnel Stages,marketing-seo
+Geographic Targeting,marketing-seo
+Goals,strategy-planning
+Governance,operations
+Growth,strategy-planning
+Growth Indicators,marketing-seo
+Growth Metrics,marketing-seo
+Growth Stage,strategy-planning
+Healthcare,healthcare
+Hospitality,service-design
+Housing,property-management
+HTML,software-development
+Human Resources,operations
+Implementation Lifecycle,service-design
+Indexing,marketing-seo
+Industrial,property-management
+Industrial Property,property-management
+Information,data-management
+Information Retrieval,ai-machine-learning
+Infrastructure,platform-services
+Innovation,strategy-planning
+Innovation Methodology,strategy-planning
+Insurance,strategy-planning
+Integration,software-development
+Intellectual Property,strategy-planning
+International Communication,marketing-seo
+Investment,valuation-finance
+Journey Metrics,marketing-seo
+Keyword Strategy,marketing-seo
+Knowledge Management,data-management
+Language,software-development
+Lead Generation,marketing-seo
+Lead Value,marketing-seo
+Leadership,strategy-planning
+Learning,ai-machine-learning
+Leasing,leasing-tenancy
+Legal,strategy-planning
+Legal Framework,strategy-planning
+Legal Structure,strategy-planning
+Licensing,operations
+Lifecycle Stage,marketing-seo
+Link Analysis,marketing-seo
+Link Building,marketing-seo
+Link Metrics,marketing-seo
+Link Types,marketing-seo
+List Health,marketing-seo
+Local SEO,marketing-seo
+Local SEO Metrics,marketing-seo
+Logistics,operations
+Machine Learning,ai-machine-learning
+Maintenance,property-management
+Management,operations
+Management Metrics,operations
+Market,strategy-planning
+Market Analysis,strategy-planning
+Market Launch,strategy-planning
+Marketing,marketing-seo
+Marketing Effectiveness,marketing-seo
+Marketing Efficiency,marketing-seo
+Marketing Framework,marketing-seo
+Marketing Funnel,marketing-seo
+Marketing Performance,marketing-seo
+Marketing Strategy,marketing-seo
+Messaging Marketing,marketing-seo
+Methodology,product-management
+Metrics,operations
+Milestone,product-management
+Modeling,ai-machine-learning
+Natural Language Processing,ai-machine-learning
+Normalization,data-management
+Office,property-management
+Off-Page SEO,marketing-seo
+On-Page SEO,marketing-seo
+Operations,operations
+Operations Management,operations
+Optimization,operations
+Organization,operations
+Organizational Change,operations
+Outreach Performance,marketing-seo
+Page Performance,marketing-seo
+Paid Advertising Metrics,marketing-seo
+Partnerships,strategy-planning
+Performance,operations
+Performance Analysis,operations
+Performance Indicators,operations
+Performance Management,operations
+Performance Metric,operations
+Performance Metrics,operations
+Performance Standards,operations
+Personalization Metrics,marketing-seo
+Pipeline Metrics,marketing-seo
+Planning,strategy-planning
+Platform,platform-services
+Platform Metrics,marketing-seo
+Platform Services,platform-services
+Portfolio Management,strategy-planning
+Pre-Lead,marketing-seo
+Pricing Strategy,strategy-planning
+Prioritization,product-management
+Privacy,platform-services
+Process,operations
+Process Automation,operations
+Process Management,operations
+Process Mapping,operations
+Process Metrics,operations
+Process Optimization,operations
+Process Performance,operations
+Processes,operations
+Processing,data-management
+Product,product-management
+Product Development,product-management
+Product Launch,product-management
+Product Management,product-management
+Productivity Indicators,operations
+Professional Services,service-design
+Programming,software-development
+Programming Language,software-development
+Programming Paradigm,software-development
+Progress Indicators,operations
+Project Management,product-management
+Property Management,property-management
+Property Measurement,property-management
+Property Ownership,property-management
+Property Planning,property-management
+Property Types,property-management
+Property Valuation,valuation-finance
+Protection,platform-services
+Qualification,marketing-seo
+Quality,operations
+Quality Assurance,software-development
+Quality Control,operations
+Quality Indicators,operations
+Quality Management,operations
+Quality Metrics,operations
+Rankings Performance,marketing-seo
+Reach Metrics,marketing-seo
+Real Estate,property-management
+Real Estate Analysis,valuation-finance
+Real Estate Transactions,leasing-tenancy
+Real-time,ai-machine-learning
+Release Management,software-development
+Reputation Management,marketing-seo
+Reputation Metrics,marketing-seo
+Requirements Engineering,product-management
+Research,product-management
+Residential Real Estate,property-management
+Resource Management,operations
+Response Metrics,marketing-seo
+Retail Property Management,property-management
+Retail Strategy,property-management
+Retention Indicators,marketing-seo
+Retention Metrics,marketing-seo
+Revenue,strategy-planning
+Revenue Expansion,strategy-planning
+Revenue Growth,strategy-planning
+Revenue Management,strategy-planning
+Revenue Metrics,marketing-seo
+Revenue Operations,strategy-planning
+Revenue Optimization,strategy-planning
+Revenue Performance,marketing-seo
+Risk Management,operations
+Risk Metrics,operations
+ROI Metrics,marketing-seo
+SaaS,strategy-planning
+Sales,marketing-seo
+Sales Metrics,marketing-seo
+Sales Performance,marketing-seo
+Sales Process,marketing-seo
+Sales Readiness,marketing-seo
+Sales-to-Operations Handoff,operations
+Science,ai-machine-learning
+Search Algorithms,ai-machine-learning
+Search Behavior,marketing-seo
+Search Engines,marketing-seo
+Search Features,marketing-seo
+Search Fundamentals,marketing-seo
+SearchAtlas Metrics,marketing-seo
+Security,platform-services
+SEO,marketing-seo
+SEO Fundamentals,marketing-seo
+SEO Metrics,marketing-seo
+SEO Strategy,marketing-seo
+SEO Tools,marketing-seo
+SEO Trends,marketing-seo
+SERP Features,marketing-seo
+Service Architecture,service-design
+Service Automation,service-design
+Service Delivery,service-design
+Service Design,service-design
+Service Infrastructure,service-design
+Service Innovation,service-design
+Service Management,service-design
+Service Models,service-design
+Service Operations,service-design
+Service Optimization,service-design
+Service Specification,service-design
+Service Strategy,service-design
+Site Architecture,marketing-seo
+Site Management,marketing-seo
+Smart Buildings,property-management
+SMS Marketing,marketing-seo
+Social Proof,marketing-seo
+Software,software-development
+Software Delivery,software-development
+Software Design,software-development
+Speed Metrics,marketing-seo
+Startup Support,strategy-planning
+Storage,data-management
+Strategy,strategy-planning
+Strategy Tools,strategy-planning
+Structure,software-development
+Success Milestone,product-management
+Sustainability,property-management
+System Design,software-development
+System Performance,platform-services
+System Protection,platform-services
+System Software,software-development
+Systems Thinking,operations
+Task Management,operations
+Team Role,operations
+Technical,software-development
+Technical Configuration,platform-services
+Technical Design,software-development
+Technical Infrastructure,platform-services
+Technical SEO,marketing-seo
+Technology,software-development
+Tenant Relations,leasing-tenancy
+Testing,software-development
+Tools,software-development
+Tracking,marketing-seo
+Traffic Analysis,marketing-seo
+Traffic Metrics,marketing-seo
+Traffic Sources,marketing-seo
+Transfer,operations
+User Actions,marketing-seo
+User Behavior,marketing-seo
+User Experience,product-management
+User Interface,software-development
+User Signals,marketing-seo
+UX,software-development
+Validation,software-development
+Value Design,service-design
+Verification,software-development
+Version Control,software-development
+Visibility Performance,marketing-seo
+Voice Technology,ai-machine-learning
+Volume Indicators,marketing-seo
+Volume Metrics,marketing-seo
+Web Services,software-development
+Web Technology,software-development
+Zoning,property-management
