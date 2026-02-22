@@ -2,8 +2,8 @@
 """Convert markdown glossary files into CSV format for SKOS import.
 
 Auto-detects 4 source format variants and produces a CSV compatible
-with csv-to-skos.py. Supports category mapping, collision detection,
-and dry-run mode.
+with csv-to-skos.py. Supports category mapping, deduplication,
+collision detection, and dry-run mode.
 
 Usage:
     python scripts/md-to-csv.py SOURCE_FILES... \\
@@ -18,6 +18,7 @@ import csv
 import os
 import re
 import sys
+from collections import OrderedDict
 
 # Headings that are NOT glossary terms
 HEADING_BLOCKLIST = {
@@ -59,24 +60,50 @@ def extract_abbrev(title):
     return title.strip(), None
 
 
+def build_term(title_raw, abbrev, clean_name, definition, categories,
+               abbreviations, variations, synonyms, src):
+    """Build a normalized term dict from parsed fields.
+
+    Abbreviation logic: outside parens = prefLabel, inside = altLabel.
+    e.g. "SEO (Search Engine Optimization)" -> prefLabel=SEO, alt=Search Engine Optimization
+    """
+    slug = slugify(title_raw)
+
+    alts = []
+    parens_expansion = None
+    if abbrev:
+        # Outside text is the preferred label, parens text is an alt
+        pref_label = clean_name
+        alts.append(abbrev)
+        parens_expansion = abbrev
+    else:
+        pref_label = clean_name
+
+    for field_val in [abbreviations, variations, synonyms]:
+        cv = clean_value(field_val) if field_val else None
+        if cv:
+            for item in cv.split(","):
+                item = item.strip()
+                if item and item.lower() not in NA_VALUES and item != pref_label:
+                    alts.append(item)
+
+    return {
+        "slug": slug,
+        "pref_label": pref_label,
+        "alt_labels": alts,
+        "definition": definition,
+        "categories_raw": categories,
+        "source": src,
+        "_parens_expansion": parens_expansion,
+    }
+
+
 def clean_value(val):
     """Strip and return None if value is an NA sentinel."""
     val = val.strip()
     if val.lower() in NA_VALUES:
         return None
     return val
-
-
-def clean_multi(val):
-    """Parse a comma-separated field, filter NA values, return pipe-delimited."""
-    if not val or val.strip().lower() in NA_VALUES:
-        return ""
-    parts = []
-    for item in val.split(","):
-        item = item.strip()
-        if item and item.lower() not in NA_VALUES:
-            parts.append(item)
-    return "|".join(parts)
 
 
 def skip_frontmatter(lines):
@@ -140,7 +167,6 @@ def detect_format(lines):
     # Check for bare (unbolded) "Categories:" without **
     has_bare_categories = False
     has_bold_categories = False
-    has_section_grouped = False
 
     for line in window:
         stripped = line.strip()
@@ -190,7 +216,6 @@ def parse_standard(lines, src):
                 continue
 
             clean_name, abbrev = extract_abbrev(title_raw)
-            slug = slugify(title_raw)
             i += 1
 
             # Skip blank lines after heading
@@ -240,31 +265,10 @@ def parse_standard(lines, src):
             if i < len(lines) and lines[i].strip() == "---":
                 i += 1
 
-            # Build alt_labels from abbreviations, variations, synonyms
-            alts = []
-            if abbrev:
-                # Title had (ABBREV); prefLabel = ABBREV, altLabel = clean_name
-                pref_label = abbrev
-                alts.append(clean_name)
-            else:
-                pref_label = clean_name
-
-            for field_val in [abbreviations, variations, synonyms]:
-                cv = clean_value(field_val) if field_val else None
-                if cv:
-                    for item in cv.split(","):
-                        item = item.strip()
-                        if item and item.lower() not in NA_VALUES and item != pref_label:
-                            alts.append(item)
-
-            terms.append({
-                "slug": slug,
-                "pref_label": pref_label,
-                "alt_labels": alts,
-                "definition": definition,
-                "categories_raw": categories,
-                "source": src,
-            })
+            terms.append(build_term(
+                title_raw, abbrev, clean_name, definition, categories,
+                abbreviations, variations, synonyms, src
+            ))
         else:
             i += 1
 
@@ -296,7 +300,6 @@ def parse_unbolded(lines, src):
                 continue
 
             clean_name, abbrev = extract_abbrev(title_raw)
-            slug = slugify(title_raw)
             i += 1
 
             # Collect definition (lines before first bare field)
@@ -344,30 +347,10 @@ def parse_unbolded(lines, src):
                 # Skip Tags and other fields
                 i += 1
 
-            # Build alt_labels
-            alts = []
-            if abbrev:
-                pref_label = abbrev
-                alts.append(clean_name)
-            else:
-                pref_label = clean_name
-
-            for field_val in [abbreviations, variations, synonyms]:
-                cv = clean_value(field_val) if field_val else None
-                if cv:
-                    for item in cv.split(","):
-                        item = item.strip()
-                        if item and item.lower() not in NA_VALUES and item != pref_label:
-                            alts.append(item)
-
-            terms.append({
-                "slug": slug,
-                "pref_label": pref_label,
-                "alt_labels": alts,
-                "definition": definition,
-                "categories_raw": categories,
-                "source": src,
-            })
+            terms.append(build_term(
+                title_raw, abbrev, clean_name, definition, categories,
+                abbreviations, variations, synonyms, src
+            ))
         else:
             i += 1
 
@@ -392,7 +375,6 @@ def parse_section_grouped(lines, src):
                 continue
 
             clean_name, abbrev = extract_abbrev(title_raw)
-            slug = slugify(title_raw)
             i += 1
 
             # Skip blank lines after heading
@@ -442,30 +424,10 @@ def parse_section_grouped(lines, src):
             if i < len(lines) and lines[i].strip() == "---":
                 i += 1
 
-            # Build alt_labels
-            alts = []
-            if abbrev:
-                pref_label = abbrev
-                alts.append(clean_name)
-            else:
-                pref_label = clean_name
-
-            for field_val in [abbreviations, variations, synonyms]:
-                cv = clean_value(field_val) if field_val else None
-                if cv:
-                    for item in cv.split(","):
-                        item = item.strip()
-                        if item and item.lower() not in NA_VALUES and item != pref_label:
-                            alts.append(item)
-
-            terms.append({
-                "slug": slug,
-                "pref_label": pref_label,
-                "alt_labels": alts,
-                "definition": definition,
-                "categories_raw": categories,
-                "source": src,
-            })
+            terms.append(build_term(
+                title_raw, abbrev, clean_name, definition, categories,
+                abbreviations, variations, synonyms, src
+            ))
         else:
             i += 1
 
@@ -489,11 +451,9 @@ def parse_process_mgmt(lines, src):
                 continue
 
             clean_name, abbrev = extract_abbrev(title_raw)
-            slug = slugify(title_raw)
             i += 1
 
             definition = ""
-            alts = []
 
             # Parse structured fields
             while i < len(lines):
@@ -513,24 +473,155 @@ def parse_process_mgmt(lines, src):
             if i < len(lines) and lines[i].strip() == "---":
                 i += 1
 
-            if abbrev:
-                pref_label = abbrev
-                alts.append(clean_name)
-            else:
-                pref_label = clean_name
-
-            terms.append({
-                "slug": slug,
-                "pref_label": pref_label,
-                "alt_labels": alts,
-                "definition": definition,
-                "categories_raw": "",  # PROCESS_MGMT has no categories
-                "source": src,
-            })
+            terms.append(build_term(
+                title_raw, abbrev, clean_name, definition, "",
+                "", "", "", src
+            ))
         else:
             i += 1
 
     return terms
+
+
+def deduplicate_terms(all_terms, cat_map):
+    """Merge duplicate slugs into single entries, disambiguating homographs.
+
+    Strategy:
+    1. Group terms by slug.
+    2. Within each group, sub-group by concept identity using the
+       parenthetical expansion (e.g. "Structured Query Language" vs
+       "Sales Qualified Lead" for slug "sql").
+    3. If only one concept: merge all entries (longest definition wins,
+       union alt_labels, best broader_slug).
+    4. If multiple concepts: keep the majority slug, re-slug the
+       minority using their parenthetical expansion.
+    """
+    from collections import defaultdict
+
+    groups = defaultdict(list)
+    for term in all_terms:
+        groups[term["slug"]].append(term)
+
+    result = []
+    merge_log = []
+    disambig_log = []
+
+    for slug in sorted(groups.keys()):
+        entries = groups[slug]
+        if len(entries) == 1:
+            result.append(entries[0])
+            continue
+
+        # Sub-group by concept identity.
+        # Identity key: the parenthetical expansion (full-name form) if
+        # it is a long expansion (has spaces, longer than prefLabel).
+        # This distinguishes "SQL (Structured Query Language)" from
+        # "SQL (Sales Qualified Lead)".
+        identity_groups = defaultdict(list)
+        for e in entries:
+            exp = e.get("_parens_expansion", "")
+            pref = e["pref_label"]
+            # A "full-name expansion" is longer than the prefix and
+            # contains spaces (not just an abbreviation like "CAC")
+            if exp and " " in exp and len(exp) > len(pref):
+                identity_groups[exp].append(e)
+            else:
+                identity_groups[""].append(e)
+
+        if len(identity_groups) <= 1:
+            # All same concept: merge
+            merged = _merge_group(entries, cat_map)
+            merge_log.append((slug, len(entries),
+                              [e["source"] for e in entries]))
+            result.append(merged)
+        else:
+            # Multiple distinct concepts sharing the same slug
+            # The group with the most entries (or the one without a
+            # full-name expansion) keeps the original slug.
+            canonical_key = ""
+            if "" in identity_groups:
+                canonical_key = ""
+            else:
+                canonical_key = max(identity_groups.keys(),
+                                    key=lambda k: len(identity_groups[k]))
+
+            for key, group in identity_groups.items():
+                merged = _merge_group(group, cat_map)
+                if key == canonical_key:
+                    result.append(merged)
+                    merge_log.append((slug, len(group),
+                                     [e["source"] for e in group]))
+                else:
+                    # Re-slug using the expansion
+                    new_slug = slugify(key)
+                    old_slug = merged["slug"]
+                    merged["slug"] = new_slug
+                    disambig_log.append((old_slug, new_slug,
+                                         merged["pref_label"],
+                                         [e["source"] for e in group]))
+                    result.append(merged)
+
+    # Report
+    if merge_log:
+        print("Dedup: merged {} slug groups ({} terms -> {} unique)".format(
+            len(merge_log),
+            sum(c for _, c, _ in merge_log),
+            len(merge_log),
+        ), file=sys.stderr)
+    if disambig_log:
+        print("Dedup: disambiguated {} homographs:".format(
+            len(disambig_log)), file=sys.stderr)
+        for old, new, label, sources in disambig_log:
+            print("  {} -> {} ({}, from {})".format(
+                old, new, label, ", ".join(sources)
+            ), file=sys.stderr)
+
+    return result
+
+
+def _merge_group(entries, cat_map):
+    """Merge a list of term dicts for the same concept into one.
+
+    - Longest definition wins
+    - Alt labels are unioned (preserving order, removing dupes)
+    - Best broader_slug is chosen by priority
+    - Scope notes list all source files
+    """
+    # Pick the entry with the longest definition as base
+    best = max(entries, key=lambda e: len(e.get("definition", "")))
+
+    # Union alt_labels (preserve order, dedupe case-insensitively)
+    seen_alts = set()
+    merged_alts = []
+    for e in entries:
+        for alt in e.get("alt_labels", []):
+            key = alt.lower()
+            if key not in seen_alts and key != best["pref_label"].lower():
+                seen_alts.add(key)
+                merged_alts.append(alt)
+
+    # Pick broader_slug: prefer the most domain-specific match.
+    # Use the broader from the entry with the longest definition.
+    broader_candidates = []
+    for e in entries:
+        b, _ = map_broader(e["categories_raw"], cat_map, e["source"])
+        if b:
+            broader_candidates.append(b)
+    broader = broader_candidates[0] if broader_candidates else ""
+
+    # Combine sources
+    sources = list(OrderedDict.fromkeys(e["source"] for e in entries))
+
+    return {
+        "slug": best["slug"],
+        "pref_label": best["pref_label"],
+        "alt_labels": merged_alts,
+        "definition": best["definition"],
+        "categories_raw": best["categories_raw"],
+        "source": sources[0],  # primary source
+        "_all_sources": sources,
+        "_parens_expansion": best.get("_parens_expansion"),
+    }
 
 
 def load_category_map(path):
@@ -575,6 +666,10 @@ def map_to_row(term, cat_map):
         term["categories_raw"], cat_map, term["source"]
     )
 
+    # Use combined source list if available
+    sources = term.get("_all_sources", [term["source"]])
+    scope_note = "Source: {}".format(", ".join(sources))
+
     return {
         "uri_slug": term["slug"],
         "pref_label": term["pref_label"],
@@ -583,7 +678,7 @@ def map_to_row(term, cat_map):
         "definition": term["definition"],
         "broader_slug": broader,
         "related_slugs": "",
-        "scope_note": "Source: {}".format(term["source"]),
+        "scope_note": scope_note,
         "example": "",
     }, unmapped
 
@@ -631,7 +726,11 @@ def main():
     )
     parser.add_argument(
         "--collision-report", default=None,
-        help="Path to write collision report CSV"
+        help="Path to write collision report CSV (pre-dedup)"
+    )
+    parser.add_argument(
+        "--no-dedup", action="store_true",
+        help="Disable automatic deduplication"
     )
     parser.add_argument(
         "--dry-run", action="store_true",
@@ -643,7 +742,6 @@ def main():
     print("Loaded {} category mappings".format(len(cat_map)), file=sys.stderr)
 
     all_terms = []
-    all_unmapped = set()
     file_counts = {}
 
     PARSERS = {
@@ -672,23 +770,30 @@ def main():
 
     print("Total terms parsed: {}".format(len(all_terms)), file=sys.stderr)
 
-    # Detect collisions
+    # Pre-dedup collision detection (for reporting)
     collisions = detect_collisions(all_terms)
     if collisions:
-        print("WARNING: {} slug collisions detected".format(
+        print("{} slug collisions detected".format(
             len(collisions)
         ), file=sys.stderr)
-        for slug, terms in sorted(collisions.items()):
-            sources = [t["source"] for t in terms]
-            print("  {} ({}x): {}".format(
-                slug, len(terms), ", ".join(sources)
-            ), file=sys.stderr)
 
     if args.collision_report and collisions:
         write_collision_report(collisions, args.collision_report)
 
+    # Deduplicate
+    if not args.no_dedup:
+        all_terms = deduplicate_terms(all_terms, cat_map)
+        remaining = detect_collisions(all_terms)
+        if remaining:
+            print("WARNING: {} unresolved collisions after dedup".format(
+                len(remaining)
+            ), file=sys.stderr)
+        else:
+            print("All collisions resolved", file=sys.stderr)
+
     # Map to rows and collect unmapped categories
     rows = []
+    all_unmapped = set()
     for term in all_terms:
         row, unmapped = map_to_row(term, cat_map)
         rows.append(row)
@@ -702,8 +807,7 @@ def main():
     if args.dry_run:
         print("\nDry-run summary:", file=sys.stderr)
         print("  Files: {}".format(len(file_counts)), file=sys.stderr)
-        print("  Total terms: {}".format(len(rows)), file=sys.stderr)
-        print("  Collisions: {}".format(len(collisions)), file=sys.stderr)
+        print("  Total terms (after dedup): {}".format(len(rows)), file=sys.stderr)
         print("  Unmapped categories: {}".format(len(all_unmapped)), file=sys.stderr)
         return
 
