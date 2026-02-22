@@ -52,7 +52,7 @@ if [ -z "$VERSION" ]; then
     LAST_VERSION=$(python3 -c "
 import json, sys
 try:
-    with open('$MANIFEST') as f:
+    with open(sys.argv[1]) as f:
         m = json.load(f)
     if m['snapshots']:
         print(m['snapshots'][-1]['version'])
@@ -60,7 +60,7 @@ try:
         print('0.0.0')
 except Exception:
     print('0.0.0')
-" 2>/dev/null || echo "0.0.0")
+" "$MANIFEST" 2>/dev/null || echo "0.0.0")
 
     # Increment patch version
     IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_VERSION"
@@ -91,27 +91,30 @@ if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
 fi
 
 # Count terms in export
-TERM_COUNT=$(grep -c "a skos:Concept" "$SNAPSHOT_FILE" 2>/dev/null || echo "0")
+TERM_COUNT=$(grep -c "a skos:Concept" "$SNAPSHOT_FILE" 2>/dev/null || true)
+if [ -z "$TERM_COUNT" ]; then TERM_COUNT=0; fi
 FILE_SIZE=$(wc -c < "$SNAPSHOT_FILE" | tr -d ' ')
 CHECKSUM=$(sha256sum "$SNAPSHOT_FILE" | cut -d' ' -f1)
 
 # Update manifest
+SNAPSHOT_BASENAME=$(basename "$SNAPSHOT_FILE")
 python3 -c "
-import json
-with open('$MANIFEST') as f:
+import json, sys
+manifest_path = sys.argv[1]
+with open(manifest_path) as f:
     m = json.load(f)
 m['snapshots'].append({
-    'version': '$VERSION',
-    'timestamp': '$TIMESTAMP',
-    'file': '$(basename "$SNAPSHOT_FILE")',
-    'message': '$MESSAGE',
-    'term_count': $TERM_COUNT,
-    'file_size': $FILE_SIZE,
-    'sha256': '$CHECKSUM'
+    'version': sys.argv[2],
+    'timestamp': sys.argv[3],
+    'file': sys.argv[4],
+    'message': sys.argv[5],
+    'term_count': int(sys.argv[6]),
+    'file_size': int(sys.argv[7]),
+    'sha256': sys.argv[8]
 })
-with open('$MANIFEST', 'w') as f:
+with open(manifest_path, 'w') as f:
     json.dump(m, f, indent=2)
-"
+" "$MANIFEST" "$VERSION" "$TIMESTAMP" "$SNAPSHOT_BASENAME" "$MESSAGE" "$TERM_COUNT" "$FILE_SIZE" "$CHECKSUM"
 
 echo "Snapshot created successfully."
 echo "  Version:    v${VERSION}"

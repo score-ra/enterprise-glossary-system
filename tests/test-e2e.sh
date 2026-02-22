@@ -136,12 +136,18 @@ elapsed_ms() {
 }
 
 cleanup_test_data() {
-    # Remove E2E test triples from Fuseki
+    # Remove E2E test triples from both default and named graphs
     curl -s -o /dev/null \
         -u "$FUSEKI_USER:$FUSEKI_PASS" \
         -X POST \
         -H "Content-Type: application/sparql-update" \
         -d "DELETE WHERE { <http://egms-test/e2e/test-concept> ?p ?o }" \
+        "$FUSEKI_URL/$DATASET/update" 2>/dev/null || true
+    curl -s -o /dev/null \
+        -u "$FUSEKI_USER:$FUSEKI_PASS" \
+        -X POST \
+        -H "Content-Type: application/sparql-update" \
+        -d "DELETE WHERE { GRAPH <$GRAPH_URI> { <http://egms-test/e2e/test-concept> ?p ?o } }" \
         "$FUSEKI_URL/$DATASET/update" 2>/dev/null || true
 }
 
@@ -421,16 +427,18 @@ if [ -f "$TEMP_DIR/manifest-backup.json" ]; then
     cp "$TEMP_DIR/manifest-backup.json" "$SNAPSHOT_DIR/manifest.json"
 else
     python3 -c "
-import json
-with open('$SNAPSHOT_DIR/manifest.json') as f:
+import json, sys
+with open(sys.argv[1]) as f:
     m = json.load(f)
 m['snapshots'] = [s for s in m['snapshots'] if not s['version'].startswith('99.0.')]
-with open('$SNAPSHOT_DIR/manifest.json', 'w') as f:
+with open(sys.argv[1], 'w') as f:
     json.dump(m, f, indent=2)
-" 2>/dev/null
+" "$SNAPSHOT_DIR/manifest.json" 2>/dev/null
 fi
 # Verify cleanup
-REMAINING=$(ls "$SNAPSHOT_DIR"/glossary-v99.0.* 2>/dev/null | wc -l || echo "0")
+REMAINING=$(ls "$SNAPSHOT_DIR"/glossary-v99.0.* 2>/dev/null | wc -l || true)
+REMAINING=$(echo "$REMAINING" | tr -d '[:space:]')
+if [ -z "$REMAINING" ]; then REMAINING=0; fi
 if [ "$REMAINING" -eq 0 ]; then
     echo "  PASS: Test snapshots cleaned up"
     PASS=$((PASS + 1))
@@ -532,7 +540,7 @@ HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
     -u "$EDITOR_USER:$EDITOR_PASS" \
     -X POST \
     -H "Content-Type: application/sparql-update" \
-    -d "INSERT DATA { <$E2E_TEST_URI> a <http://www.w3.org/2004/02/skos/core#Concept> ; <http://www.w3.org/2004/02/skos/core#prefLabel> \"$E2E_TEST_LABEL\"@en ; <http://www.w3.org/2004/02/skos/core#inScheme> <http://glossary.example.org/terms/enterprise-glossary> }" \
+    -d "INSERT DATA { GRAPH <$GRAPH_URI> { <$E2E_TEST_URI> a <http://www.w3.org/2004/02/skos/core#Concept> ; <http://www.w3.org/2004/02/skos/core#prefLabel> \"$E2E_TEST_LABEL\"@en ; <http://www.w3.org/2004/02/skos/core#inScheme> <http://glossary.example.org/terms/enterprise-glossary> } }" \
     "$GATEWAY_URL/fuseki/update" 2>/dev/null || echo "000")
 assert_http_range "Insert test concept accepted" 200 299 "$HTTP_CODE"
 
@@ -549,7 +557,7 @@ curl -s -o /dev/null \
     -u "$EDITOR_USER:$EDITOR_PASS" \
     -X POST \
     -H "Content-Type: application/sparql-update" \
-    -d "DELETE WHERE { <$E2E_TEST_URI> ?p ?o }" \
+    -d "DELETE WHERE { GRAPH <$GRAPH_URI> { <$E2E_TEST_URI> ?p ?o } }" \
     "$GATEWAY_URL/fuseki/update" 2>/dev/null || true
 RESPONSE=$(curl -s -H "Accept: application/sparql-results+json" \
     --data-urlencode "query=ASK { <$E2E_TEST_URI> ?p ?o }" \

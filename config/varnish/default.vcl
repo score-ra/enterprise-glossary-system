@@ -35,9 +35,13 @@ sub vcl_recv {
 
 sub vcl_backend_response {
     # Cache SPARQL query responses for 5 minutes
+    # Override Fuseki's Cache-Control: no-cache,no-store headers
     if (bereq.url ~ "^/skosmos/(sparql|query)") {
         set beresp.ttl = 5m;
         set beresp.grace = 30s;
+        set beresp.uncacheable = false;
+        unset beresp.http.Cache-Control;
+        set beresp.http.Cache-Control = "public, max-age=300";
     }
 
     # Do not cache error responses
