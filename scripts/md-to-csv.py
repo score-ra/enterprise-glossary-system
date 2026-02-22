@@ -193,13 +193,20 @@ def parse_standard(lines, src):
             slug = slugify(title_raw)
             i += 1
 
-            # Collect definition (paragraphs before first ** field)
+            # Skip blank lines after heading
+            while i < len(lines) and not lines[i].strip():
+                i += 1
+
+            # Collect definition (paragraphs before first ** field or ---)
             definition_lines = []
             while i < len(lines):
                 l = lines[i].strip()
-                if not l or l == "---" or l.startswith("**"):
+                if l == "---" or l.startswith("**"):
                     break
-                definition_lines.append(l)
+                if l.startswith("## ") and not l.startswith("### "):
+                    break
+                if l:
+                    definition_lines.append(l)
                 i += 1
 
             definition = " ".join(definition_lines)
@@ -388,15 +395,20 @@ def parse_section_grouped(lines, src):
             slug = slugify(title_raw)
             i += 1
 
-            # Collect definition (paragraphs before first ** field)
+            # Skip blank lines after heading
+            while i < len(lines) and not lines[i].strip():
+                i += 1
+
+            # Collect definition (paragraphs before first ** field or ---)
             definition_lines = []
             while i < len(lines):
                 l = lines[i].strip()
-                if not l or l == "---" or l.startswith("**"):
+                if l == "---" or l.startswith("**"):
                     break
                 if l.startswith("## ") or l.startswith("### "):
                     break
-                definition_lines.append(l)
+                if l:
+                    definition_lines.append(l)
                 i += 1
 
             definition = " ".join(definition_lines)
