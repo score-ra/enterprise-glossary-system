@@ -20,11 +20,16 @@ eg:enterprise-glossary a skos:ConceptScheme ;
     dct:description "Centralized, URI-based glossary of standardized organizational terminology."@en ;
     dct:creator "EGMS Team" ;
     dct:created "2026-02-20"^^xsd:date ;
-    dct:modified "2026-02-21"^^xsd:date ;
+    dct:modified "2026-02-22"^^xsd:date ;
     skos:hasTopConcept eg:engineering ,
                        eg:business ,
                        eg:infrastructure ,
-                       eg:process .
+                       eg:process ,
+                       eg:real-estate ,
+                       eg:legal ,
+                       eg:accounting ,
+                       eg:healthcare ,
+                       eg:home-services .
 
 # ======================================================================
 # Top-Level Categories
@@ -68,4 +73,220 @@ eg:process a skos:Concept ;
     skos:definition "Conceptos relacionados con procesos organizacionales, flujos de trabajo y practicas operativas."@es ;
     skos:definition "Concepts lies aux processus organisationnels, aux flux de travail et aux pratiques operationnelles."@fr ;
     skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Core Mid-Level Categories
+# ======================================================================
+
+# --- Engineering mid-levels ---
+
+eg:software-development a skos:Concept ;
+    skos:prefLabel "Software Development"@en ;
+    skos:definition "Programming languages, frameworks, design patterns, and development methodologies."@en ;
+    skos:broader eg:engineering ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:ai-machine-learning a skos:Concept ;
+    skos:prefLabel "AI & Machine Learning"@en ;
+    skos:definition "Artificial intelligence, ML models, NLP, computer vision, and data science tooling."@en ;
+    skos:broader eg:engineering ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:data-management a skos:Concept ;
+    skos:prefLabel "Data Management"@en ;
+    skos:definition "Databases, data pipelines, ETL, data governance, and analytics infrastructure."@en ;
+    skos:broader eg:engineering ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Business mid-levels ---
+
+eg:marketing-seo a skos:Concept ;
+    skos:prefLabel "Marketing & SEO"@en ;
+    skos:definition "Digital marketing, search engine optimization, content strategy, and advertising."@en ;
+    skos:broader eg:business ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:strategy-planning a skos:Concept ;
+    skos:prefLabel "Strategy & Planning"@en ;
+    skos:definition "Business planning, lean startup methodology, financial modeling, and market analysis."@en ;
+    skos:broader eg:business ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:product-management a skos:Concept ;
+    skos:prefLabel "Product Management"@en ;
+    skos:definition "Product lifecycle, roadmapping, user research, and feature prioritization."@en ;
+    skos:broader eg:business ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:service-design a skos:Concept ;
+    skos:prefLabel "Service Design"@en ;
+    skos:definition "Service-as-a-product thinking, service blueprinting, and customer experience."@en ;
+    skos:broader eg:business ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Infrastructure mid-levels ---
+
+eg:platform-services a skos:Concept ;
+    skos:prefLabel "Platform Services"@en ;
+    skos:definition "Cloud platforms, hosting, CDN, DNS, monitoring, and DevOps infrastructure."@en ;
+    skos:broader eg:infrastructure ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Process mid-levels ---
+
+eg:operations a skos:Concept ;
+    skos:prefLabel "Operations"@en ;
+    skos:definition "Process management, workflow optimization, and operational excellence."@en ;
+    skos:broader eg:process ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:sc-internal a skos:Concept ;
+    skos:prefLabel "SC Internal"@en ;
+    skos:definition "Symphony Core-specific approved terminology and internal conventions."@en ;
+    skos:broader eg:process ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Vertical Top-Level Concepts
+# ======================================================================
+
+eg:real-estate a skos:Concept ;
+    skos:prefLabel "Real Estate"@en ;
+    skos:definition "Real estate industry terminology."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:legal a skos:Concept ;
+    skos:prefLabel "Legal"@en ;
+    skos:definition "Legal industry terminology."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:accounting a skos:Concept ;
+    skos:prefLabel "Accounting"@en ;
+    skos:definition "Accounting and finance terminology."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:healthcare a skos:Concept ;
+    skos:prefLabel "Healthcare"@en ;
+    skos:definition "Healthcare industry terminology."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:home-services a skos:Concept ;
+    skos:prefLabel "Home Services"@en ;
+    skos:definition "Home services industry terminology."@en ;
+    skos:topConceptOf eg:enterprise-glossary ;
+    skos:inScheme eg:enterprise-glossary .
+
+# ======================================================================
+# Vertical Mid-Level Categories
+# ======================================================================
+
+# --- Real Estate mid-levels ---
+
+eg:property-management a skos:Concept ;
+    skos:prefLabel "Property Management"@en ;
+    skos:definition "Property types, building operations, maintenance, and tenant services."@en ;
+    skos:broader eg:real-estate ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:leasing-tenancy a skos:Concept ;
+    skos:prefLabel "Leasing & Tenancy"@en ;
+    skos:definition "Lease types, tenant relations, occupancy, and rental agreements."@en ;
+    skos:broader eg:real-estate ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:valuation-finance a skos:Concept ;
+    skos:prefLabel "Valuation & Finance"@en ;
+    skos:definition "Property valuation, real estate finance, investment metrics, and cap rates."@en ;
+    skos:broader eg:real-estate ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Legal mid-levels (scaffold) ---
+
+eg:legal-business-formation a skos:Concept ;
+    skos:prefLabel "Business Formation"@en ;
+    skos:definition "Entity types, incorporation, and partnership agreements."@en ;
+    skos:broader eg:legal ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:legal-compliance a skos:Concept ;
+    skos:prefLabel "Compliance"@en ;
+    skos:definition "Regulatory compliance, filings, and licensing requirements."@en ;
+    skos:broader eg:legal ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:legal-intellectual-property a skos:Concept ;
+    skos:prefLabel "Intellectual Property"@en ;
+    skos:definition "Patents, trademarks, copyrights, and trade secrets."@en ;
+    skos:broader eg:legal ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:legal-contracts a skos:Concept ;
+    skos:prefLabel "Contracts"@en ;
+    skos:definition "Contract types, terms, negotiation, and enforcement."@en ;
+    skos:broader eg:legal ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Accounting mid-levels (scaffold) ---
+
+eg:accounting-tax-filing a skos:Concept ;
+    skos:prefLabel "Tax & Filing"@en ;
+    skos:definition "Tax types, filing requirements, deadlines, and deductions."@en ;
+    skos:broader eg:accounting ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:accounting-bookkeeping a skos:Concept ;
+    skos:prefLabel "Bookkeeping"@en ;
+    skos:definition "Chart of accounts, journal entries, and reconciliation."@en ;
+    skos:broader eg:accounting ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:accounting-financial-reporting a skos:Concept ;
+    skos:prefLabel "Financial Reporting"@en ;
+    skos:definition "Financial statements, GAAP, and auditing standards."@en ;
+    skos:broader eg:accounting ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Healthcare mid-levels (scaffold) ---
+
+eg:healthcare-practice-management a skos:Concept ;
+    skos:prefLabel "Practice Management"@en ;
+    skos:definition "Scheduling, patient intake, and office operations."@en ;
+    skos:broader eg:healthcare ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:healthcare-hipaa-compliance a skos:Concept ;
+    skos:prefLabel "HIPAA & Compliance"@en ;
+    skos:definition "Privacy regulations, security requirements, and audit procedures."@en ;
+    skos:broader eg:healthcare ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:healthcare-billing-coding a skos:Concept ;
+    skos:prefLabel "Billing & Coding"@en ;
+    skos:definition "Medical coding (ICD/CPT), insurance billing, and claims processing."@en ;
+    skos:broader eg:healthcare ;
+    skos:inScheme eg:enterprise-glossary .
+
+# --- Home Services mid-levels (scaffold) ---
+
+eg:home-services-trades a skos:Concept ;
+    skos:prefLabel "Trades & Specialties"@en ;
+    skos:definition "HVAC, plumbing, electrical, roofing, and landscaping specializations."@en ;
+    skos:broader eg:home-services ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:home-services-estimating a skos:Concept ;
+    skos:prefLabel "Estimating & Pricing"@en ;
+    skos:definition "Job estimation, pricing models, and materials costing."@en ;
+    skos:broader eg:home-services ;
+    skos:inScheme eg:enterprise-glossary .
+
+eg:home-services-licensing a skos:Concept ;
+    skos:prefLabel "Licensing & Permits"@en ;
+    skos:definition "Contractor licensing, building permits, and inspection requirements."@en ;
+    skos:broader eg:home-services ;
     skos:inScheme eg:enterprise-glossary .
