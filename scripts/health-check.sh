@@ -22,11 +22,15 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMPOSE_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/docker-compose.yml"
+
 FUSEKI_URL="${FUSEKI_URL:-http://localhost:3030}"
 SKOSMOS_URL="${SKOSMOS_URL:-http://localhost:9090}"
 CACHE_URL="${CACHE_URL:-http://localhost:9031}"
 GATEWAY_URL="${GATEWAY_URL:-http://localhost:8080}"
 DATASET="${DATASET:-skosmos}"
+EXPECTED_SERVICES="fuseki fuseki-cache skosmos gateway"
 
 JSON_MODE=false
 ALERT_MODE=false
@@ -41,6 +45,55 @@ done
 
 OVERALL_STATUS="healthy"
 RESULTS=""
+
+check_containers() {
+    local compose_dir
+    compose_dir="$(dirname "$COMPOSE_FILE")"
+    local ps_output
+    ps_output=$(docker compose -f "$COMPOSE_FILE" ps -a --format json 2>/dev/null) || true
+
+    if [ "$JSON_MODE" = false ]; then
+        echo "Containers:"
+    fi
+
+    for svc in $EXPECTED_SERVICES; do
+        local state="" health=""
+        if [ -n "$ps_output" ]; then
+            local line
+            line=$(echo "$ps_output" | grep "\"Service\":\"$svc\"" || true)
+            if [ -n "$line" ]; then
+                state=$(echo "$line" | sed -n 's/.*"State":"\([^"]*\)".*/\1/p')
+                health=$(echo "$line" | sed -n 's/.*"Health":"\([^"]*\)".*/\1/p')
+            fi
+        fi
+
+        if [ -z "$state" ]; then
+            OVERALL_STATUS="unhealthy"
+            if [ "$JSON_MODE" = true ]; then
+                RESULTS="$RESULTS{\"check\":\"container\",\"service\":\"$svc\",\"status\":\"not found\"},"
+            else
+                echo "  [FAIL] $svc (not found)"
+            fi
+        elif [ "$state" != "running" ]; then
+            OVERALL_STATUS="unhealthy"
+            if [ "$JSON_MODE" = true ]; then
+                RESULTS="$RESULTS{\"check\":\"container\",\"service\":\"$svc\",\"status\":\"$state\"},"
+            else
+                echo "  [FAIL] $svc ($state)"
+            fi
+        else
+            local detail="running"
+            if [ -n "$health" ]; then
+                detail="running, $health"
+            fi
+            if [ "$JSON_MODE" = true ]; then
+                RESULTS="$RESULTS{\"check\":\"container\",\"service\":\"$svc\",\"status\":\"$detail\"},"
+            else
+                echo "  [OK] $svc ($detail)"
+            fi
+        fi
+    done
+}
 
 check_service() {
     local name="$1"
@@ -148,6 +201,12 @@ TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 if [ "$JSON_MODE" = false ]; then
     echo "=== EGMS Health Check ==="
     echo "Timestamp: $TIMESTAMP"
+    echo ""
+fi
+
+check_containers
+
+if [ "$JSON_MODE" = false ]; then
     echo ""
     echo "Services:"
 fi
