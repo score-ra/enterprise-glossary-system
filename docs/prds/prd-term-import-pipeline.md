@@ -148,31 +148,31 @@ See [Taxonomy Reference](../taxonomy-reference.md) for the full hierarchy diagra
 
 | ID | Requirement | Priority | Status |
 |----|-------------|----------|--------|
-| FR-IP-001 | Parse 4 markdown format variants (Standard, Unbolded, Section-grouped, Process-management) into a common intermediate CSV | Must | Not Started |
-| FR-IP-002 | Auto-detect format variant per page based on heading patterns and field formatting | Must | Not Started |
-| FR-IP-003 | Extract all source fields: Title, Description, Categories, Tags, Abbreviations, Variations, Synonyms | Must | Not Started |
-| FR-IP-004 | Map source fields to SKOS properties per the field mapping table | Must | Not Started |
-| FR-IP-005 | Strip parenthetical abbreviations from titles and emit them as `skos:altLabel` | Must | Not Started |
-| FR-IP-006 | Skip "N/A" values in Abbreviations, Variations, and Synonyms fields | Must | Not Started |
-| FR-IP-007 | Map source Categories to EGMS taxonomy concepts via `data/category-mapping.csv` lookup | Must | Not Started |
-| FR-IP-008 | Generate a collision report CSV listing all cross-page duplicate terms with their source pages and definitions | Must | Not Started |
-| FR-IP-009 | Add `source_page` column to intermediate CSV and emit it as `skos:scopeNote` in generated Turtle | Must | Not Started |
-| FR-IP-010 | Expand `data/concept-scheme.ttl` with mid-level concepts under each core branch and vertical top concepts with their mid-level categories | Must | Not Started |
-| FR-IP-011 | Scaffold vertical concepts (Legal, Accounting, Healthcare, Home Services) with top concept and 3-4 mid-level categories each, containing no terms | Should | Not Started |
-| FR-IP-012 | Validate all generated Turtle files with `scripts/validate-skos.py` before loading | Must | Not Started |
-| FR-IP-013 | Load imported terms via existing `scripts/load-data.sh` pipeline | Must | Not Started |
-| FR-IP-014 | Generate an import summary report: total terms parsed, loaded, duplicates found, categories mapped | Should | Not Started |
-| FR-IP-015 | Document the end-to-end import process in an operator runbook with pre-flight checks, execution steps, and rollback procedure | Must | Not Started |
+| FR-IP-001 | Parse 4 markdown format variants (Standard, Unbolded, Section-grouped, Process-management) into a common intermediate CSV | Must | Implemented |
+| FR-IP-002 | Auto-detect format variant per page based on heading patterns and field formatting | Must | Implemented |
+| FR-IP-003 | Extract all source fields: Title, Description, Categories, Tags, Abbreviations, Variations, Synonyms | Must | Implemented |
+| FR-IP-004 | Map source fields to SKOS properties per the field mapping table | Must | Implemented |
+| FR-IP-005 | Strip parenthetical abbreviations from titles and emit them as `skos:altLabel` | Must | Implemented |
+| FR-IP-006 | Skip "N/A" values in Abbreviations, Variations, and Synonyms fields | Must | Implemented |
+| FR-IP-007 | Map source Categories to EGMS taxonomy concepts via `data/category-mapping.csv` lookup | Must | Implemented |
+| FR-IP-008 | Generate a collision report CSV listing all cross-page duplicate terms with their source pages and definitions | Must | Implemented |
+| FR-IP-009 | Add `source_page` column to intermediate CSV and emit it as `skos:scopeNote` in generated Turtle | Must | Implemented |
+| FR-IP-010 | Expand `data/concept-scheme.ttl` with mid-level concepts under each core branch and vertical top concepts with their mid-level categories | Must | Implemented |
+| FR-IP-011 | Scaffold vertical concepts (Legal, Accounting, Healthcare, Home Services) with top concept and 3-4 mid-level categories each, containing no terms | Should | Implemented |
+| FR-IP-012 | Validate all generated Turtle files with `scripts/validate-skos.py` before loading | Must | Implemented |
+| FR-IP-013 | Load imported terms via existing `scripts/load-data.sh` pipeline | Must | Implemented |
+| FR-IP-014 | Generate an import summary report: total terms parsed, loaded, duplicates found, categories mapped | Should | Implemented |
+| FR-IP-015 | Document the end-to-end import process in an operator runbook with pre-flight checks, execution steps, and rollback procedure | Must | Implemented |
 
 ### Non-Functional Requirements
 
 | ID | Category | Requirement | Target | Status |
 |----|----------|-------------|--------|--------|
-| NFR-IP-001 | Data Integrity | Zero term loss during import -- every source term accounted for in import report | 100% coverage | Not Started |
-| NFR-IP-002 | Repeatability | Pipeline runs end-to-end without manual intervention (except dedup review) | Single command per stage | Not Started |
-| NFR-IP-003 | Extensibility | Adding a new vertical requires no code changes to pipeline scripts | Config-only addition | Not Started |
-| NFR-IP-004 | Idempotency | Re-running the pipeline on the same source produces identical output | Deterministic output | Not Started |
-| NFR-IP-005 | Provenance | Every imported term traces back to its source markdown page | `skos:scopeNote` on all terms | Not Started |
+| NFR-IP-001 | Data Integrity | Zero term loss during import -- every source term accounted for in import report | 100% coverage | Implemented |
+| NFR-IP-002 | Repeatability | Pipeline runs end-to-end without manual intervention (except dedup review) | Single command per stage | Implemented |
+| NFR-IP-003 | Extensibility | Adding a new vertical requires no code changes to pipeline scripts | Config-only addition | Implemented |
+| NFR-IP-004 | Idempotency | Re-running the pipeline on the same source produces identical output | Deterministic output | Implemented |
+| NFR-IP-005 | Provenance | Every imported term traces back to its source markdown page | `skos:scopeNote` on all terms | Implemented |
 
 ### Requirements Traceability
 
