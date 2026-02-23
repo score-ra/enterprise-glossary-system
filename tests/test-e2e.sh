@@ -285,7 +285,13 @@ EXPORT_DIR="$TEMP_DIR/exports"
 if bash "$PROJECT_DIR/scripts/export-data.sh" -o "$EXPORT_DIR" 2>/dev/null; then
     EXPORT_FILE=$(ls "$EXPORT_DIR"/*.ttl 2>/dev/null | head -1)
     if [ -n "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
-        assert_contains "Export contains SKOS data" "$(cat "$EXPORT_FILE")" "Concept"
+        if grep -qi "Concept" "$EXPORT_FILE"; then
+            echo "  PASS: Export contains SKOS data"
+            PASS=$((PASS + 1))
+        else
+            echo "  FAIL: Export contains SKOS data (expected 'Concept' in file)"
+            FAIL=$((FAIL + 1))
+        fi
     else
         echo "  FAIL: Export file is empty or missing"
         FAIL=$((FAIL + 1))
